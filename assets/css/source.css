@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --space-base: 1rem;
+  --fontSize-base: 1rem;
+}
+
+body {
+  font-size: 14px;
+}
+
+@media only screen and (min-width: 700px) {
+  body {
+    font-size: 16px;
+  }
+}
+
+@layer components {
+  button {
+    @apply border rounded-md px-base py-small;
+  }
+
+  .modal-container {
+    @apply bg-black bg-black/50 z-10 absolute top-0 w-screen h-screen;
+  }
+}
+
+@layer utilities {
+  .flex-center {
+    @apply justify-center items-center;
+  }
+}
