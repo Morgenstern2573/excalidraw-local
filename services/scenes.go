@@ -110,6 +110,21 @@ func (a *AppScenes) GetSceneData(sceneID string) (string, error) {
 	return data, nil
 }
 
+func (a *AppScenes) UpdateSceneData(sceneID, data string) error {
+	if sceneID == "" {
+		return errors.New("no id passed")
+	}
+
+	query := "UPDATE Scenes SET Data = ? WHERE ID = ?"
+	_, err := a.DB.Exec(query, data, sceneID)
+
+	if err != nil {
+		return nil
+	}
+
+	return nil
+}
+
 func (a *AppScenes) GetSceneName(sceneID string) (string, error) {
 	if sceneID == "" {
 		return "", errors.New("no id passed")

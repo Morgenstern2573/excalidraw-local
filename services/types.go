@@ -6,6 +6,7 @@ type SceneSvc interface {
 	CreateScene(collectionID, name string) (Scene, error)
 	GetScenes(collectionID string) ([]Scene, error)
 	GetScene(sceneID string) (Scene, error)
+	UpdateSceneData(sceneID, data string) error
 }
 
 type CollectionsSvc interface {

@@ -92,3 +92,27 @@ func (a *Application) NewScene(c echo.Context) error {
 
 	return c.Redirect(http.StatusFound, fmt.Sprintf("/?scene=%s", scene.ID))
 }
+
+func (a *Application) UpdateSceneData(c echo.Context) error {
+	type SceneData struct {
+		ID   string `form:"scene"`
+		Data string `form:"payload"`
+	}
+
+	scData := SceneData{}
+	err := c.Bind(&scData)
+
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	err = services.Scenes().UpdateSceneData(scData.ID, scData.Data)
+
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	return nil
+}

@@ -1,13 +1,62 @@
 const Excalidraw = window.ExcalidrawLib.Excalidraw;
 const MainMenu = window.ExcalidrawLib.MainMenu;
 const CustomMenuItem = MainMenu.ItemCustom;
+const SCENE_ID = document.getElementById("scene-id").innerHTML.trim();
+
+const debounce = (fn, timeout) => {
+  let handle = 0;
+  let lastArgs = null;
+
+  const retv = function (...args) {
+    lastArgs = args;
+    clearTimeout(handle);
+
+    handle = setTimeout(() => {
+      lastArgs = null;
+      fn(...args);
+    }, timeout);
+  };
+
+  retv.flush = function () {
+    clearTimeout(handle);
+    if (lastArgs) {
+      const _lastArgs = lastArgs;
+      lastArgs = null;
+      fn(..._lastArgs);
+    }
+  };
+
+  retv.cancel = function () {
+    lastArgs = null;
+    clearTimeout(handle);
+  };
+
+  return retv;
+};
+
+const saveSceneData = debounce(async function (api) {
+  const elems = api.getSceneElements();
+  const state = api.getAppState();
+  const JSONSceneData = ExcalidrawLib.serializeAsJSON(elems, state);
+
+  const form = new FormData();
+  form.append("scene", SCENE_ID);
+  form.append("payload", JSONSceneData);
+
+  navigator.sendBeacon("/update-scene-data", form);
+}, 2000);
 
 const App = () => {
   const [excalidrawAPI, setExcalidrawAPI] = React.useState(null);
   return (
     <>
       <div style={{ height: "80vh" }}>
-        <Excalidraw excalidrawAPI={(api) => setExcalidrawAPI(api)}>
+        <Excalidraw
+          excalidrawAPI={(api) => setExcalidrawAPI(api)}
+          onChange={() => {
+            saveSceneData(excalidrawAPI);
+          }}
+        >
           <MainMenu>
             <CustomMenuItem>
               <button
