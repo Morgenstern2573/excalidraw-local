@@ -9,9 +9,10 @@ CREATE TABLE Collections(
 CREATE TABLE Scenes(
   Name TEXT, 
   CollectionID TEXT, 
-  ID TEXT PRIMARY KEY,
+  ID TEXT,
   Data TEXT, 
-  FOREIGN KEY(CollectionID) REFERENCES Collections(ID)
+  FOREIGN KEY(CollectionID) REFERENCES Collections(ID),
+  PRIMARY KEY(Name, CollectionID)
 );
 
 

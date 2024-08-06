@@ -7,6 +7,14 @@ import (
 )
 
 func (a *AppScenes) CreateScene(collectionID, name string) (Scene, error) {
+	if name == "" {
+		return Scene{}, errors.New("no name passed")
+	}
+
+	if collectionID == "" {
+		return Scene{}, errors.New("no collection passed")
+	}
+
 	id := generateID()
 
 	query := "INSERT INTO Scenes (Name, CollectionID, ID, Data) VALUES (?, ?, ?, ?)"
@@ -19,6 +27,10 @@ func (a *AppScenes) CreateScene(collectionID, name string) (Scene, error) {
 }
 
 func (a *AppScenes) GetScene(sceneID string) (Scene, error) {
+	if sceneID == "" {
+		return Scene{}, errors.New("no id passed")
+	}
+
 	retv := Scene{}
 	retv.ID = sceneID
 	name, err := a.GetSceneName(sceneID)
@@ -44,6 +56,10 @@ func (a *AppScenes) GetScene(sceneID string) (Scene, error) {
 }
 
 func (a *AppScenes) GetScenes(collectionID string) ([]Scene, error) {
+	if collectionID == "" {
+		return nil, errors.New("no collection passed")
+	}
+
 	retv := make([]Scene, 0)
 	query := "SELECT ID FROM Scenes WHERE CollectionID = ?"
 	rows, err := a.DB.Query(query, collectionID)
@@ -76,6 +92,10 @@ func (a *AppScenes) GetScenes(collectionID string) ([]Scene, error) {
 }
 
 func (a *AppScenes) GetSceneData(sceneID string) (string, error) {
+	if sceneID == "" {
+		return "", errors.New("no id passed")
+	}
+
 	query := "SELECT Data FROM Scenes WHERE ID = ?"
 	row := a.DB.QueryRow(query, sceneID)
 
@@ -91,6 +111,10 @@ func (a *AppScenes) GetSceneData(sceneID string) (string, error) {
 }
 
 func (a *AppScenes) GetSceneName(sceneID string) (string, error) {
+	if sceneID == "" {
+		return "", errors.New("no id passed")
+	}
+
 	query := "SELECT Name FROM Scenes WHERE ID = ?"
 	row := a.DB.QueryRow(query, sceneID)
 
@@ -106,7 +130,11 @@ func (a *AppScenes) GetSceneName(sceneID string) (string, error) {
 }
 
 func (a *AppScenes) GetParentCollectionID(sceneID string) (string, error) {
-	query := "SELECT Collection FROM Scenes WHERE ID = ?"
+	if sceneID == "" {
+		return "", errors.New("no id passed")
+	}
+
+	query := "SELECT CollectionID FROM Scenes WHERE ID = ?"
 	row := a.DB.QueryRow(query, sceneID)
 
 	var id string

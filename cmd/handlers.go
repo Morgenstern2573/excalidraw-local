@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/actanonv/excalidraw-local/services"
@@ -9,7 +10,7 @@ import (
 )
 
 func (a *Application) Index(c echo.Context) error {
-	sceneID := c.Param("sceneID")
+	sceneID := c.QueryParam("scene")
 
 	var activeScene services.Scene
 	var activeCollection services.Collection
@@ -28,6 +29,11 @@ func (a *Application) Index(c echo.Context) error {
 
 		if err != nil {
 			a.Server.Logger.Error(err)
+
+			if err.Error() == "scene not found" {
+				return c.String(http.StatusNotFound, "404 not found")
+			}
+
 			return err
 		}
 
@@ -60,4 +66,29 @@ func (a *Application) Index(c echo.Context) error {
 	}
 
 	return c.Render(http.StatusOK, "home", pageData)
+}
+
+func (a *Application) NewScene(c echo.Context) error {
+	type FormData struct {
+		CollectionID string `form:"collection-ID"`
+		SceneName    string `form:"scene-name"`
+	}
+
+	fData := new(FormData)
+	err := c.Bind(fData)
+
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	scene, err := services.Scenes().CreateScene(
+		fData.CollectionID, fData.SceneName)
+
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	return c.Redirect(http.StatusFound, fmt.Sprintf("/?scene=%s", scene.ID))
 }

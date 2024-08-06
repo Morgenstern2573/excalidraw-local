@@ -19,6 +19,13 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// Enable foreign key checks
+	_, err = db.Exec("PRAGMA foreign_keys = ON;")
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
 	defer db.Close()
 
 	services.Init(db)

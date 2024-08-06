@@ -608,6 +608,10 @@ button {
   background-color: rgb(0 0 0 / 0.5);
 }
 
+.invisible {
+  visibility: hidden;
+}
+
 .absolute {
   position: absolute;
 }
@@ -625,6 +629,10 @@ button {
   margin-right: auto;
 }
 
+.block {
+  display: block;
+}
+
 .flex {
   display: flex;
 }
@@ -637,12 +645,24 @@ button {
   display: none;
 }
 
+.h-0 {
+  height: 0px;
+}
+
 .w-screen {
   width: 100vw;
 }
 
+.w-full {
+  width: 100%;
+}
+
 .max-w-screen-lg {
   max-width: 1024px;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
 }
 
 .justify-center {

@@ -22,6 +22,10 @@ func (a *AppCollections) createDefaultCollection() (Collection, error) {
 }
 
 func (a *AppCollections) CreateCollection(name string) (Collection, error) {
+	if name == "" {
+		return Collection{}, errors.New("no name passed")
+	}
+
 	id := generateID()
 
 	query := "INSERT INTO Collections (Name, ID) VALUES (?, ?)"
@@ -34,6 +38,10 @@ func (a *AppCollections) CreateCollection(name string) (Collection, error) {
 }
 
 func (a *AppCollections) GetCollection(collectionID string) (Collection, error) {
+	if collectionID == "" {
+		return Collection{}, errors.New("no id passed")
+	}
+
 	query := "SELECT Name FROM Collections WHERE ID = ?"
 	row := a.DB.QueryRow(query, collectionID)
 
