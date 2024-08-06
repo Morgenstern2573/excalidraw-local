@@ -18,22 +18,41 @@
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
 </head>
-<body class="max-w-screen-lg mx-auto">
-  <header>
-    <h1 class="text-large font-medium">Excalidraw</h1>
-    <div class="flex gap-base">
-      <form class="flex gap-base">
-        <input type="text" required value="Untitled Scene" class="border border-gray-500 rounded-md">
-        <button class="border-gray-500">Save Scene</button>    
-      </form>
+
+<body 
+  class="container mx-auto grid lg:grid-cols-[1fr_5fr]"
+>
+  <section class="sidebar">
+    <button>
+      New collection
+    </button>
+
+    <form class="hidden">
+      <input type="text" name="" id="" placeholder="Collection Name">
+      <button>Save</button>
+      <button>Cancel</button>
+    </form>
     
-      <button class="border-gray-500">Load Scene</button>
+    <div class="flex">
+      <select name="" id="">
+        <option value="">Select a Scene</option>
+      </select>
+    
+      <button>
+        +
+      </button>
     </div>
-  </header>
-   
-  <div class="container">
+    
+    <form class="hidden">
+      <input type="text" name="" id="" placeholder="Scene Name">
+      <button>Save</button>
+      <button>Cancel</button>
+    </form>
+  </section>
+  <main>
+    <h2>Untitled Scene</h2>
     <div id="app"></div>
-  </div>
+  </main>
   <script type="text/babel" src="public/excalidraw/index.js"></script>
 </body>
 </html>

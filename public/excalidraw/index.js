@@ -14,15 +14,37 @@ const App = () => {
                 style={{ padding: "1rem" }}
                 onClick={() => {
                   const elems = excalidrawAPI.getSceneElements();
+                  const state = excalidrawAPI.getAppState();
+
+                  console.log(elems, state);
                   const blobPromise = window.ExcalidrawLib.exportToBlob({
                     elements: elems,
                   });
                   blobPromise.then((blob) => {
                     console.log(blob);
                   });
+
+                  console.log(ExcalidrawLib.serializeAsJSON(elems, state));
                 }}
               >
-                custom item
+                Save to JSON
+              </button>
+            </CustomMenuItem>
+
+            <CustomMenuItem>
+              <button
+                style={{ padding: "1rem" }}
+                onClick={() => {
+                  let sceneData = window.prompt("Gimme JSON!");
+                  sceneData = JSON.parse(sceneData);
+
+                  excalidrawAPI.updateScene({
+                    appState: sceneData["appState"],
+                    elements: sceneData["elements"],
+                  });
+                }}
+              >
+                Load from JSON
               </button>
             </CustomMenuItem>
           </MainMenu>

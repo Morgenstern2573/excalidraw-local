@@ -629,6 +629,14 @@ button {
   display: flex;
 }
 
+.grid {
+  display: grid;
+}
+
+.hidden {
+  display: none;
+}
+
 .w-screen {
   width: 100vw;
 }
@@ -697,5 +705,11 @@ body {
 @media only screen and (min-width: 700px) {
   body {
     font-size: 16px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:grid-cols-\[1fr_5fr\] {
+    grid-template-columns: 1fr 5fr;
   }
 }
