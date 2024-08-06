@@ -76,6 +76,8 @@
   <main>
     {{ if .ActiveScene.ID }}
       <p class="invisible h-0" id="scene-id"> {{.ActiveScene.ID}} </p>
+      <p class="invisible h-0" id="initial-scene-data"> {{.ActiveScene.Data}} </p>
+
       <h2>{{ .ActiveScene.Name }}</h2>
       <div id="app"></div>
     

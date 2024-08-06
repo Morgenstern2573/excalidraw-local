@@ -2,6 +2,9 @@ const Excalidraw = window.ExcalidrawLib.Excalidraw;
 const MainMenu = window.ExcalidrawLib.MainMenu;
 const CustomMenuItem = MainMenu.ItemCustom;
 const SCENE_ID = document.getElementById("scene-id").innerHTML.trim();
+const INITIAL_SCENE_DATA = JSON.parse(
+  document.getElementById("initial-scene-data").innerHTML.trim()
+);
 
 const debounce = (fn, timeout) => {
   let handle = 0;
@@ -55,6 +58,10 @@ const App = () => {
           excalidrawAPI={(api) => setExcalidrawAPI(api)}
           onChange={() => {
             saveSceneData(excalidrawAPI);
+          }}
+          initialData={{
+            elements: INITIAL_SCENE_DATA["elements"],
+            appState: INITIAL_SCENE_DATA["appState"],
           }}
         >
           <MainMenu>
