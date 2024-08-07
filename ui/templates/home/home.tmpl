@@ -27,9 +27,12 @@
 {{/* Context is of type ui.IndexPageData */}}
 <body 
   hx-boost="true"
-  class="px-base lg:px-large grid md:grid-cols-[1fr_5fr] lg:grid-cols-[1fr_4fr]"
+  class="px-base lg:px-large h-screen
+    grid md:grid-cols-[1fr_5fr] lg:grid-cols-[1fr_4fr]"
 >
-  <section class="sidebar bg-gray-50">
+  <section 
+    class="sidebar bg-gray-50 h-full"
+  >
     <button>
       New collection
     </button>
