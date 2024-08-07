@@ -3,14 +3,19 @@ function initExcalidraw() {
   const MainMenu = window.ExcalidrawLib.MainMenu;
   const CustomMenuItem = MainMenu.ItemCustom;
   const SCENE_ID = document.getElementById("scene-id").innerHTML.trim();
+  if (!SCENE_ID || SCENE_ID === "") {
+    return;
+  }
+
   let INITIAL_SCENE_DATA = {};
 
   try {
-    let scdata = JSON.parse(
-      document.getElementById("initial-scene-data").innerHTML.trim()
-    );
-
-    INITIAL_SCENE_DATA = scdata;
+    let scdata = document.getElementById("initial-scene-data").innerHTML.trim();
+    if (scdata !== "") {
+      INITIAL_SCENE_DATA = JSON.parse(scdata);
+    } else {
+      console.log("no initial scene data found");
+    }
   } catch (err) {
     console.error(err);
   }

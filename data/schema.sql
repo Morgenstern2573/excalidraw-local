@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS Scenes;
 DROP TABLE IF EXISTS Collections;
 
 CREATE TABLE Collections(
-  Name TEXT, 
+  Name TEXT UNIQUE, 
   ID TEXT PRIMARY KEY
 );
 

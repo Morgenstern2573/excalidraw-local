@@ -34,8 +34,15 @@
       New collection
     </button>
 
-    <form class="hidden">
-      <input type="text" name="" id="" placeholder="Collection Name">
+    <form class="flex flex-wrap">
+      <input
+        type="text" 
+        name="" 
+        id=""
+        class="w-full"
+        placeholder="Collection Name"
+      >
+      
       <button>Save</button>
       <button>Cancel</button>
     </form>
@@ -96,9 +103,7 @@
     {{ end }}
   </main>
 
-{{ if .ActiveScene.ID }}
   <script type="text/babel" src="public/excalidraw/index.js"></script>
-{{ end }}
   <script type="text/babel" src="public/script.js"></script>
 </body>
 </html>
