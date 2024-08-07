@@ -17,10 +17,17 @@
 ></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
+<script 
+  src="https://unpkg.com/htmx.org@2.0.1" 
+  integrity="sha384-QWGpdj554B4ETpJJC9z+ZHJcA/i59TyjxEPXiiUgN2WmTyV5OEZWCD6gQhgkdpB/" 
+  crossorigin="anonymous"
+></script>
+
 </head>
 {{/* Context is of type ui.IndexPageData */}}
 <body 
-  class="container mx-auto grid lg:grid-cols-[1fr_5fr]"
+  hx-boost="true"
+  class="container mx-auto grid md:grid-cols-[1fr_5fr] lg:grid-cols-[1fr_4fr]"
 >
   <section class="sidebar">
     <button>
@@ -45,7 +52,11 @@
       </button>
     </div>
     
-    <form class="flex flex-wrap" action="/new-scene" method="POST">
+    <form 
+      class="flex flex-wrap" 
+      hx-post="/new-scene"
+      hx-target="#scene-list" 
+    >
       <input 
         type="text" 
         class="invisible h-0 block" 
@@ -65,12 +76,11 @@
       <button type="button">Cancel</button>
     </form>
 
-    <div>
-      {{ range .SceneList }}
-        <a href="/?scene={{.ID}}">{{ .Name }}</a>
-      {{ else }}
-        <p>Please add a scene</p>
-      {{ end }}
+    <div
+      id="scene-list" 
+      class="flex flex-col gap-small"
+    >
+      {{ template "home/scene-list" .SceneList }}
     </div>
   </section>
   <main>
@@ -89,5 +99,6 @@
 {{ if .ActiveScene.ID }}
   <script type="text/babel" src="public/excalidraw/index.js"></script>
 {{ end }}
+  <script type="text/babel" src="public/script.js"></script>
 </body>
 </html>

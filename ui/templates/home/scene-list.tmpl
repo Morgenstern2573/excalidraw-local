@@ -1,0 +1,13 @@
+{{/* Context should be of type []services.Scene */}}
+
+{{ range . }}
+  <a 
+    hx-get="/?scene={{.ID}}"
+    hx-target="body" 
+    class="underline font-medium cursor-pointer"
+  >
+    {{ .Name }}
+  </a>
+{{ else }}
+  <p>Please add a scene</p>
+{{ end }}

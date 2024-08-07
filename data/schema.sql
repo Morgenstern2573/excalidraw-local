@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS Collections;
 DROP TABLE IF EXISTS Scenes;
+DROP TABLE IF EXISTS Collections;
 
 CREATE TABLE Collections(
   Name TEXT, 
@@ -14,6 +14,3 @@ CREATE TABLE Scenes(
   FOREIGN KEY(CollectionID) REFERENCES Collections(ID),
   PRIMARY KEY(Name, CollectionID)
 );
-
-
-

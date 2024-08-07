@@ -23,7 +23,7 @@ func (a *AppScenes) CreateScene(collectionID, name string) (Scene, error) {
 		log.Printf("Error creating scene: %v", err)
 		return Scene{}, err
 	}
-	return Scene{ID: id}, nil
+	return Scene{ID: id, Collection: collectionID, Name: name}, nil
 }
 
 func (a *AppScenes) GetScene(sceneID string) (Scene, error) {

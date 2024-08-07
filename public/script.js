@@ -8,3 +8,9 @@ window.dispatchEventOnBody = (detailObj) => {
     .querySelector("body")
     .dispatchEvent(new CustomEvent("deleteElem", { detail: detailObj }));
 };
+
+document
+  .querySelector("body")
+  .addEventListener("initExcalidraw", function (event) {
+    window.initExcalidraw();
+  });

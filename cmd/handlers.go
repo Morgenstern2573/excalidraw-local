@@ -6,6 +6,7 @@ import (
 
 	"github.com/actanonv/excalidraw-local/services"
 	"github.com/actanonv/excalidraw-local/ui"
+	"github.com/donseba/go-htmx"
 	"github.com/labstack/echo/v4"
 )
 
@@ -65,6 +66,11 @@ func (a *Application) Index(c echo.Context) error {
 		SceneList:        sceneList,
 	}
 
+	if htmx.IsHxRequest(c.Request()) {
+		c.Response().Header().Add("HX-Push-Url", fmt.Sprintf("/?scene=%s", activeScene.ID))
+		c.Response().Header().Add("HX-Trigger-After-Swap", "initExcalidraw")
+	}
+
 	return c.Render(http.StatusOK, "home", pageData)
 }
 
@@ -90,7 +96,14 @@ func (a *Application) NewScene(c echo.Context) error {
 		return err
 	}
 
-	return c.Redirect(http.StatusFound, fmt.Sprintf("/?scene=%s", scene.ID))
+	updatedSceneList, err := services.Scenes().GetScenes(scene.Collection)
+
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	return c.Render(http.StatusOK, "home/scene-list", updatedSceneList)
 }
 
 func (a *Application) UpdateSceneData(c echo.Context) error {
