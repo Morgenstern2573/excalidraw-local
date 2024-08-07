@@ -19,7 +19,11 @@ body {
 
 @layer components {
   button {
-    @apply border rounded-md px-base py-small;
+    @apply border rounded-md px-base py-tiny;
+  }
+
+  input {
+    @apply p-base border border-black rounded-md placeholder:text-gray-600;
   }
 
   .modal-container {

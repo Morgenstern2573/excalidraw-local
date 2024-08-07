@@ -23,6 +23,9 @@
   crossorigin="anonymous"
 ></script>
 
+<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
 </head>
 {{/* Context is of type ui.IndexPageData */}}
 <body 
@@ -33,59 +36,76 @@
   <section 
     class="sidebar bg-gray-50 h-full"
   >
-    <button>
-      New collection
-    </button>
-
-    <form
-      class="flex flex-wrap"
-      hx-post="/new-collection"
-      hx-target="#select-collection"
-      hx-swap="outerHTML"
+    <div
+      x-data="{
+        showForm: false
+      }"
     >
-      <input
-        type="text" 
-        name="collection-name" 
-        id=""
-        class="w-full"
-        placeholder="Collection Name"
-      >
-      
-      <button>Save</button>
-      <button>Cancel</button>
-    </form>
-    
-    <div class="flex">
-      {{ template "home/select-collection" .CollectionsData }}
-    
-      <button>
-        +
+      <button @click="showForm = true">
+        New collection
       </button>
+
+      <form
+        class="flex flex-wrap gap-base"
+        hx-post="/new-collection"
+        hx-target="#select-collection"
+        hx-swap="outerHTML"
+
+        x-show="showForm"
+        x-collapse
+      >
+        <input
+          type="text"
+          name="collection-name"
+          id=""
+          class="w-full"
+          placeholder="Collection Name"
+        >
+      
+        <button @click="showForm = false">Save</button>
+        <button type="button" @click="showForm = false">Cancel</button>
+      </form>
     </div>
     
-    <form 
-      class="flex flex-wrap" 
-      hx-post="/new-scene"
-      hx-target="#scene-list" 
+    <div
+      x-data="{
+        showForm: false
+      }"
     >
-      <input 
-        type="text" 
-        class="invisible h-0 block" 
-        name="collection-ID" 
-        value={{ .CollectionsData.ActiveCollection.ID }}
-      >
+      <div class="flex">
+        {{ template "home/select-collection" .CollectionsData }}
+      
+        <button @click="showForm = true">
+          +
+        </button>
+      </div>
+      
+      <form
+        class="flex flex-wrap gap-base"
+        hx-post="/new-scene"
+        hx-target="#scene-list"
 
-      <input 
-        type="text"
-        class="w-full" 
-        name="scene-name" 
-        placeholder="Scene Name"
-        required
+        x-show="showForm"
+        x-collapse
       >
-
-      <button>Save</button>
-      <button type="button">Cancel</button>
-    </form>
+        <input
+          type="text"
+          class="invisible h-0 block"
+          name="collection-ID"
+          value={{ .CollectionsData.ActiveCollection.ID }}
+        >
+        <input
+          type="text"
+          class="w-full"
+          name="scene-name"
+          placeholder="Scene Name"
+          required
+        >
+        
+        <button @click="showForm = false">Save</button>
+        <button type="button" @click="showForm = false">Cancel</button>
+      </form>
+    </div>
 
     <div
       id="scene-list" 
@@ -99,7 +119,7 @@
       <p class="invisible h-0" id="scene-id"> {{.ActiveScene.ID}} </p>
       <p class="invisible h-0" id="initial-scene-data"> {{.ActiveScene.Data}} </p>
 
-      <h2>{{ .ActiveScene.Name }}</h2>
+      <h2 class="text-large font-medium text-center">{{ .ActiveScene.Name }}</h2>
       <div id="app"></div>
     
     {{ else }}

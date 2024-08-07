@@ -54,7 +54,6 @@ function initExcalidraw() {
   let INITIAL_SCENE_DATA = {};
 
   try {
-    debugger;
     let serverData = document
       .getElementById("initial-scene-data")
       .innerHTML.trim();
