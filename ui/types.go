@@ -2,9 +2,13 @@ package ui
 
 import "github.com/actanonv/excalidraw-local/services"
 
-type IndexPageData struct {
-	ActiveScene      services.Scene
+type IndexCollections struct {
+	CollectionsList  []services.Collection
 	ActiveCollection services.Collection
-	Collections      []services.Collection
-	SceneList        []services.Scene
+}
+
+type IndexPageData struct {
+	ActiveScene     services.Scene
+	SceneList       []services.Scene
+	CollectionsData IndexCollections
 }

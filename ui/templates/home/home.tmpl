@@ -34,10 +34,15 @@
       New collection
     </button>
 
-    <form class="flex flex-wrap">
+    <form
+      class="flex flex-wrap"
+      hx-post="/new-collection"
+      hx-target="#select-collection"
+      hx-swap="outerHTML"
+    >
       <input
         type="text" 
-        name="" 
+        name="collection-name" 
         id=""
         class="w-full"
         placeholder="Collection Name"
@@ -48,11 +53,7 @@
     </form>
     
     <div class="flex">
-      <select name="" id="">
-        {{ range .Collections }}
-          <option value="{{.ID}}">{{ .Name }}</option>
-        {{ end }}
-      </select>
+      {{ template "home/select-collection" .CollectionsData }}
     
       <button>
         +
@@ -68,7 +69,7 @@
         type="text" 
         class="invisible h-0 block" 
         name="collection-ID" 
-        value={{ .ActiveCollection.ID }}
+        value={{ .CollectionsData.ActiveCollection.ID }}
       >
 
       <input 

@@ -1,0 +1,14 @@
+{{/* Context should be ui.CollectionsData */}}
+
+<select name="" id="select-collection">
+  {{ range .CollectionsList }}
+    <option 
+      value="{{.ID}}"
+      {{ if eq .ID $.ActiveCollection.ID }}
+        active
+      {{ end }}
+    >
+      {{ .Name }}
+    </option>
+  {{ end }}
+</select>

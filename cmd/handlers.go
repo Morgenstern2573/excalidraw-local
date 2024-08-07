@@ -60,10 +60,12 @@ func (a *Application) Index(c echo.Context) error {
 	}
 
 	pageData := ui.IndexPageData{
-		ActiveScene:      activeScene,
-		ActiveCollection: activeCollection,
-		Collections:      appCollections,
-		SceneList:        sceneList,
+		ActiveScene: activeScene,
+		SceneList:   sceneList,
+		CollectionsData: ui.IndexCollections{
+			ActiveCollection: activeCollection,
+			CollectionsList:  appCollections,
+		},
 	}
 
 	if htmx.IsHxRequest(c.Request()) {
@@ -127,5 +129,43 @@ func (a *Application) UpdateSceneData(c echo.Context) error {
 		return err
 	}
 
+	return nil
+}
+
+func (a *Application) NewCollection(c echo.Context) error {
+	type FormData struct {
+		CollectionName string `form:"collection-name"`
+	}
+
+	fData := new(FormData)
+	err := c.Bind(fData)
+
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	newCollection, err := services.Collections().CreateCollection(
+		fData.CollectionName)
+
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	updatedCollections, err := services.Collections().GetCollections()
+
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	return c.Render(http.StatusOK, "home/select-collection", ui.IndexCollections{
+		CollectionsList:  updatedCollections,
+		ActiveCollection: newCollection,
+	})
+}
+
+func (a *Application) SceneList(c echo.Context) error {
 	return nil
 }
