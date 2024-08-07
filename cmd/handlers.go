@@ -12,6 +12,7 @@ import (
 
 func (a *Application) Index(c echo.Context) error {
 	sceneID := c.QueryParam("scene")
+	selectedCollection := c.QueryParam("select-collection")
 
 	var activeScene services.Scene
 	var activeCollection services.Collection
@@ -19,12 +20,6 @@ func (a *Application) Index(c echo.Context) error {
 
 	if sceneID == "" {
 		activeScene = services.Scene{}
-		activeCollection, err = services.Collections().GetCollection("default")
-
-		if err != nil {
-			a.Server.Logger.Error(err)
-			return err
-		}
 	} else {
 		activeScene, err = services.Scenes().GetScene(sceneID)
 
@@ -37,8 +32,27 @@ func (a *Application) Index(c echo.Context) error {
 
 			return err
 		}
+	}
 
+	if selectedCollection != "" {
+		activeCollection, err = services.Collections().GetCollection(selectedCollection)
+		if err != nil && err.Error() == "collection not found" {
+			return c.String(http.StatusNotFound, "Collection not found")
+		} else if err != nil {
+			a.Server.Logger.Error(err)
+			return err
+		}
+	} else if sceneID != "" {
 		activeCollection, err = services.Collections().GetCollection(activeScene.Collection)
+
+		if err != nil && err.Error() == "collection not found" {
+			return c.String(http.StatusNotFound, "Collection not found")
+		} else if err != nil {
+			a.Server.Logger.Error(err)
+			return err
+		}
+	} else {
+		activeCollection, err = services.Collections().GetCollection("default")
 
 		if err != nil {
 			a.Server.Logger.Error(err)
@@ -69,7 +83,12 @@ func (a *Application) Index(c echo.Context) error {
 	}
 
 	if htmx.IsHxRequest(c.Request()) {
-		c.Response().Header().Add("HX-Push-Url", fmt.Sprintf("/?scene=%s", activeScene.ID))
+		if selectedCollection != "" {
+			c.Response().Header().Add("HX-Push-Url", fmt.Sprintf("/?collection=%s", activeCollection.ID))
+		} else {
+			c.Response().Header().Add("HX-Push-Url", fmt.Sprintf("/?scene=%s", activeScene.ID))
+		}
+
 		c.Response().Header().Add("HX-Trigger-After-Swap", "initExcalidraw")
 	}
 
@@ -167,5 +186,16 @@ func (a *Application) NewCollection(c echo.Context) error {
 }
 
 func (a *Application) SceneList(c echo.Context) error {
-	return nil
+	collectionID := c.QueryParam("collection-id")
+	if collectionID == "" {
+		return c.String(http.StatusBadRequest, "collection id not found")
+	}
+
+	sceneList, err := services.Scenes().GetScenes(collectionID)
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	return c.Render(http.StatusOK, "home/scene-list", sceneList)
 }

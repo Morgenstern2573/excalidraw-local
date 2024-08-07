@@ -694,6 +694,11 @@ button {
   background-color: rgb(0 0 0 / 0.5);
 }
 
+.bg-gray-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+}
+
 .px-base {
   padding-left: var(--space-base);
   padding-right: var(--space-base);
@@ -740,5 +745,10 @@ body {
 
   .lg\:grid-cols-\[1fr_4fr\] {
     grid-template-columns: 1fr 4fr;
+  }
+
+  .lg\:px-large {
+    padding-left: calc(1.5 * var(--space-base));
+    padding-right: calc(1.5 * var(--space-base));
   }
 }

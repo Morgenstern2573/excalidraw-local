@@ -2,8 +2,20 @@ function initExcalidraw() {
   const Excalidraw = window.ExcalidrawLib.Excalidraw;
   const MainMenu = window.ExcalidrawLib.MainMenu;
   const CustomMenuItem = MainMenu.ItemCustom;
-  const SCENE_ID = document.getElementById("scene-id").innerHTML.trim();
-  if (!SCENE_ID || SCENE_ID === "") {
+  let SCENE_ID;
+  try {
+    let sc = document.getElementById("scene-id");
+    if (!sc) {
+      return;
+    }
+
+    SCENE_ID = sc.innerHTML.trim();
+    if (!SCENE_ID || SCENE_ID == "") {
+      return;
+    }
+  } catch (err) {
+    console.log("error while reading SCENE ID");
+    console.error(err);
     return;
   }
 

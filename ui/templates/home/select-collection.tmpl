@@ -1,12 +1,18 @@
 {{/* Context should be ui.CollectionsData */}}
 
-<select name="" id="select-collection">
+<select 
+  name="select-collection" 
+  id="select-collection"
+  hx-get="/"
+  hx-target="body"
+>
   {{ range .CollectionsList }}
     <option 
       value="{{.ID}}"
       {{ if eq .ID $.ActiveCollection.ID }}
-        active
+        selected
       {{ end }}
+      id="collection-opt={{.ID}}"
     >
       {{ .Name }}
     </option>
