@@ -18,12 +18,14 @@ document
 
 document
   .querySelector("body")
-  .addEventListener("deleteScene", function (event) {
-    const activeScene = document.getElementById("scene-id").innerHTML.trim();
-    const deletedScene = event.detail.value;
+  .addEventListener("deleteDrawing", function (event) {
+    const activeDrawing = document
+      .getElementById("drawing-id")
+      .innerHTML.trim();
+    const deletedDrawing = event.detail.value;
 
-    console.log(activeScene, deletedScene);
-    if (activeScene === deletedScene) {
+    console.log(activeDrawing, deletedDrawing);
+    if (activeDrawing === deletedDrawing) {
       let url = `/?select-collection=${document
         .getElementById("active-collection-id")
         .innerHTML.trim()}`;

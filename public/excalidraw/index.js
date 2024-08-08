@@ -34,46 +34,46 @@ function initExcalidraw() {
     return retv;
   };
 
-  let SCENE_ID;
+  let DRAWING_ID;
   try {
-    let sc = document.getElementById("scene-id");
+    let sc = document.getElementById("drawing-id");
     if (!sc) {
       return;
     }
 
-    SCENE_ID = sc.innerHTML.trim();
-    if (!SCENE_ID || SCENE_ID == "") {
+    DRAWING_ID = sc.innerHTML.trim();
+    if (!DRAWING_ID || DRAWING_ID == "") {
       return;
     }
   } catch (err) {
-    console.log("error while reading SCENE ID");
+    console.log("error while reading DRAWING ID");
     console.error(err);
     return;
   }
 
-  let INITIAL_SCENE_DATA = {};
+  let INITIAL_DRAWING_DATA = {};
 
   try {
     let serverData = document
-      .getElementById("initial-scene-data")
+      .getElementById("initial-drawing-data")
       .innerHTML.trim();
 
-    let localData = localStorage.getItem(SCENE_ID);
+    let localData = localStorage.getItem(DRAWING_ID);
     if (!localData || localData === "") {
       localData = {};
     }
 
     if (serverData === "") {
-      INITIAL_SCENE_DATA = localData;
+      INITIAL_DRAWING_DATA = localData;
     } else {
       serverData = JSON.parse(serverData);
       if (
         !localData["elements"] ||
         serverData["timestamp"] > localData["timestamp"]
       ) {
-        INITIAL_SCENE_DATA = serverData;
+        INITIAL_DRAWING_DATA = serverData;
       } else {
-        INITIAL_SCENE_DATA = localData;
+        INITIAL_DRAWING_DATA = localData;
       }
     }
   } catch (err) {
@@ -82,17 +82,17 @@ function initExcalidraw() {
     return;
   }
 
-  const saveSceneData = debounce(async function (api) {
-    const elems = api.getSceneElements();
+  const saveDrawingData = debounce(async function (api) {
+    const elems = api.getDrawingElements();
     const state = api.getAppState();
-    let sceneData = ExcalidrawLib.serializeAsJSON(elems, state);
+    let drawingData = ExcalidrawLib.serializeAsJSON(elems, state);
 
-    sceneData = JSON.parse(sceneData);
-    sceneData["timsetamp"] = Date.now();
+    drawingData = JSON.parse(drawingData);
+    drawingData["timsetamp"] = Date.now();
 
-    const JSONSceneData = JSON.stringify(sceneData);
+    const JSONDrawingData = JSON.stringify(drawingData);
     try {
-      localStorage.setItem(SCENE_ID, JSONSceneData);
+      localStorage.setItem(DRAWING_ID, JSONDrawingData);
     } catch (err) {
       console.error("failed to save to local storage");
       console.error(err);
@@ -101,10 +101,10 @@ function initExcalidraw() {
     }
 
     const form = new FormData();
-    form.append("scene", SCENE_ID);
-    form.append("payload", JSONSceneData);
+    form.append("drawing", DRAWING_ID);
+    form.append("payload", JSONDrawingData);
 
-    navigator.sendBeacon("/update-scene-data", form);
+    navigator.sendBeacon("/update-drawing-data", form);
   }, 500);
 
   const App = () => {
@@ -115,11 +115,11 @@ function initExcalidraw() {
           <Excalidraw
             excalidrawAPI={(api) => setExcalidrawAPI(api)}
             onChange={() => {
-              saveSceneData(excalidrawAPI);
+              saveDrawingData(excalidrawAPI);
             }}
             initialData={{
-              elements: INITIAL_SCENE_DATA["elements"],
-              appState: INITIAL_SCENE_DATA["appState"],
+              elements: INITIAL_DRAWING_DATA["elements"],
+              appState: INITIAL_DRAWING_DATA["appState"],
             }}
             autoFocus={true}
           >

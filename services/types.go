@@ -2,12 +2,12 @@ package services
 
 import "database/sql"
 
-type SceneSvc interface {
-	CreateScene(collectionID, name string) (Scene, error)
-	GetScenes(collectionID string) ([]Scene, error)
-	GetScene(sceneID string) (Scene, error)
-	UpdateSceneData(sceneID, data string) error
-	DeleteScene(sceneID string) error
+type DrawingSvc interface {
+	CreateDrawing(collectionID, name string) (Drawing, error)
+	GetDrawings(collectionID string) ([]Drawing, error)
+	GetDrawing(drawingID string) (Drawing, error)
+	UpdateDrawingData(drawingID, data string) error
+	DeleteDrawing(drawingID string) error
 }
 
 type CollectionsSvc interface {
@@ -17,7 +17,7 @@ type CollectionsSvc interface {
 	GetCollections() ([]Collection, error)
 }
 
-type AppScenes struct {
+type AppDrawings struct {
 	DB *sql.DB
 }
 
@@ -30,7 +30,7 @@ type Collection struct {
 	ID   string
 }
 
-type Scene struct {
+type Drawing struct {
 	Name       string
 	Collection string
 	ID         string

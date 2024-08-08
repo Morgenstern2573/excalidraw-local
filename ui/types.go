@@ -8,7 +8,7 @@ type IndexCollections struct {
 }
 
 type IndexPageData struct {
-	ActiveScene     services.Scene
-	SceneList       []services.Scene
+	ActiveDrawing   services.Drawing
+	DrawingList     []services.Drawing
 	CollectionsData IndexCollections
 }

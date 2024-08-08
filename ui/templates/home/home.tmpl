@@ -95,8 +95,8 @@
       
       <form
         class="flex flex-wrap gap-base mt-base"
-        hx-post="/new-scene"
-        hx-target="#scene-list"
+        hx-post="/new-drawing"
+        hx-target="#drawing-list"
 
         x-show="showForm"
         x-collapse
@@ -110,8 +110,8 @@
         <input
           type="text"
           class="w-full"
-          name="scene-name"
-          placeholder="Scene Name"
+          name="drawing-name"
+          placeholder="Drawing Name"
           required
         >
         
@@ -121,24 +121,24 @@
     </div>
 
     <div
-      id="scene-list" 
+      id="drawing-list" 
       class="flex flex-col gap-small"
     >
-      {{ template "home/scene-list" .SceneList }}
+      {{ template "home/drawing-list" .DrawingList }}
     </div>
   </section>
   <main class="h-screen">
-    {{ if .ActiveScene.ID }}
-      <p class="hidden" id="scene-id"> {{.ActiveScene.ID}} </p>
-      <p class="hidden" id="initial-scene-data"> {{.ActiveScene.Data}} </p>
-      <p class="hidden" id="active-collection-id"> {{.ActiveScene.Collection}} </p>
+    {{ if .ActiveDrawing.ID }}
+      <p class="hidden" id="drawing-id"> {{.ActiveDrawing.ID}} </p>
+      <p class="hidden" id="initial-drawing-data"> {{.ActiveDrawing.Data}} </p>
+      <p class="hidden" id="active-collection-id"> {{.ActiveDrawing.Collection}} </p>
 
 
-      <h2 class="text-large font-medium text-center">{{ .ActiveScene.Name }}</h2>
+      <h2 class="text-large font-medium text-center">{{ .ActiveDrawing.Name }}</h2>
       <div id="app"></div>
     
     {{ else }}
-      <p>Select a scene to start drawing</p>
+      <p>Select a drawing to start drawing</p>
     {{ end }}
   </main>
 

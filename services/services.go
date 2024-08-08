@@ -9,7 +9,7 @@ import (
 )
 
 type AppServices struct {
-	Scenes      SceneSvc
+	Drawings    DrawingSvc
 	Collections CollectionsSvc
 }
 
@@ -18,7 +18,7 @@ var ServiceLayer AppServices
 func Init(db *sql.DB) {
 
 	ServiceLayer = AppServices{
-		Scenes:      &AppScenes{DB: db},
+		Drawings:    &AppDrawings{DB: db},
 		Collections: &AppCollections{DB: db},
 	}
 
@@ -41,8 +41,8 @@ func generateID() string {
 	return fmt.Sprintf("%d", retv)
 }
 
-func Scenes() SceneSvc {
-	return ServiceLayer.Scenes
+func Drawings() DrawingSvc {
+	return ServiceLayer.Drawings
 }
 
 func Collections() CollectionsSvc {

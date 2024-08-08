@@ -6,47 +6,47 @@ import (
 	"log"
 )
 
-func (a *AppScenes) CreateScene(collectionID, name string) (Scene, error) {
+func (a *AppDrawings) CreateDrawing(collectionID, name string) (Drawing, error) {
 	if name == "" {
-		return Scene{}, errors.New("no name passed")
+		return Drawing{}, errors.New("no name passed")
 	}
 
 	if collectionID == "" {
-		return Scene{}, errors.New("no collection passed")
+		return Drawing{}, errors.New("no collection passed")
 	}
 
 	id := generateID()
 
-	query := "INSERT INTO Scenes (Name, CollectionID, ID, Data) VALUES (?, ?, ?, ?)"
+	query := "INSERT INTO Drawings (Name, CollectionID, ID, Data) VALUES (?, ?, ?, ?)"
 	_, err := a.DB.Exec(query, name, collectionID, id, "")
 	if err != nil {
-		log.Printf("Error creating scene: %v", err)
-		return Scene{}, err
+		log.Printf("Error creating drawing: %v", err)
+		return Drawing{}, err
 	}
-	return Scene{ID: id, Collection: collectionID, Name: name}, nil
+	return Drawing{ID: id, Collection: collectionID, Name: name}, nil
 }
 
-func (a *AppScenes) GetScene(sceneID string) (Scene, error) {
-	if sceneID == "" {
-		return Scene{}, errors.New("no id passed")
+func (a *AppDrawings) GetDrawing(drawingID string) (Drawing, error) {
+	if drawingID == "" {
+		return Drawing{}, errors.New("no id passed")
 	}
 
-	retv := Scene{}
-	retv.ID = sceneID
-	name, err := a.GetSceneName(sceneID)
+	retv := Drawing{}
+	retv.ID = drawingID
+	name, err := a.GetDrawingName(drawingID)
 
 	if err != nil {
-		return Scene{}, err
+		return Drawing{}, err
 	}
 
-	data, err := a.GetSceneData(sceneID)
+	data, err := a.GetDrawingData(drawingID)
 	if err != nil {
-		return Scene{}, err
+		return Drawing{}, err
 	}
 
-	collection, err := a.GetParentCollectionID(sceneID)
+	collection, err := a.GetParentCollectionID(drawingID)
 	if err != nil {
-		return Scene{}, err
+		return Drawing{}, err
 	}
 
 	retv.Name = name
@@ -55,68 +55,68 @@ func (a *AppScenes) GetScene(sceneID string) (Scene, error) {
 	return retv, nil
 }
 
-func (a *AppScenes) GetScenes(collectionID string) ([]Scene, error) {
+func (a *AppDrawings) GetDrawings(collectionID string) ([]Drawing, error) {
 	if collectionID == "" {
 		return nil, errors.New("no collection passed")
 	}
 
-	retv := make([]Scene, 0)
-	query := "SELECT ID FROM Scenes WHERE CollectionID = ?"
+	retv := make([]Drawing, 0)
+	query := "SELECT ID FROM Drawings WHERE CollectionID = ?"
 	rows, err := a.DB.Query(query, collectionID)
 	if err != nil {
-		log.Printf("Error getting scenes: %v", err)
+		log.Printf("Error getting drawings: %v", err)
 		return nil, err
 	}
 	defer rows.Close()
 
-	var sceneIDs []string
+	var drawingIDs []string
 	for rows.Next() {
 		var id string
 		if err := rows.Scan(&id); err != nil {
-			log.Printf("Error scanning scene ID: %v", err)
+			log.Printf("Error scanning drawing ID: %v", err)
 			return nil, err
 		}
-		sceneIDs = append(sceneIDs, id)
+		drawingIDs = append(drawingIDs, id)
 	}
 
-	for _, id := range sceneIDs {
-		scene, err := a.GetScene(id)
+	for _, id := range drawingIDs {
+		drawing, err := a.GetDrawing(id)
 		if err != nil {
 			return nil, nil
 		}
 
-		retv = append(retv, scene)
+		retv = append(retv, drawing)
 	}
 
 	return retv, nil
 }
 
-func (a *AppScenes) GetSceneData(sceneID string) (string, error) {
-	if sceneID == "" {
+func (a *AppDrawings) GetDrawingData(drawingID string) (string, error) {
+	if drawingID == "" {
 		return "", errors.New("no id passed")
 	}
 
-	query := "SELECT Data FROM Scenes WHERE ID = ?"
-	row := a.DB.QueryRow(query, sceneID)
+	query := "SELECT Data FROM Drawings WHERE ID = ?"
+	row := a.DB.QueryRow(query, drawingID)
 
 	var data string
 	if err := row.Scan(&data); err != nil {
 		if err == sql.ErrNoRows {
-			return "", errors.New("scene not found")
+			return "", errors.New("drawing not found")
 		}
-		log.Printf("Error getting scene data: %v", err)
+		log.Printf("Error getting drawing data: %v", err)
 		return "", err
 	}
 	return data, nil
 }
 
-func (a *AppScenes) UpdateSceneData(sceneID, data string) error {
-	if sceneID == "" {
+func (a *AppDrawings) UpdateDrawingData(drawingID, data string) error {
+	if drawingID == "" {
 		return errors.New("no id passed")
 	}
 
-	query := "UPDATE Scenes SET Data = ? WHERE ID = ?"
-	_, err := a.DB.Exec(query, data, sceneID)
+	query := "UPDATE Drawings SET Data = ? WHERE ID = ?"
+	_, err := a.DB.Exec(query, data, drawingID)
 
 	if err != nil {
 		return nil
@@ -125,37 +125,37 @@ func (a *AppScenes) UpdateSceneData(sceneID, data string) error {
 	return nil
 }
 
-func (a *AppScenes) GetSceneName(sceneID string) (string, error) {
-	if sceneID == "" {
+func (a *AppDrawings) GetDrawingName(drawingID string) (string, error) {
+	if drawingID == "" {
 		return "", errors.New("no id passed")
 	}
 
-	query := "SELECT Name FROM Scenes WHERE ID = ?"
-	row := a.DB.QueryRow(query, sceneID)
+	query := "SELECT Name FROM Drawings WHERE ID = ?"
+	row := a.DB.QueryRow(query, drawingID)
 
 	var name string
 	if err := row.Scan(&name); err != nil {
 		if err == sql.ErrNoRows {
-			return "", errors.New("scene not found")
+			return "", errors.New("drawing not found")
 		}
-		log.Printf("Error getting scene name: %v", err)
+		log.Printf("Error getting drawing name: %v", err)
 		return "", err
 	}
 	return name, nil
 }
 
-func (a *AppScenes) GetParentCollectionID(sceneID string) (string, error) {
-	if sceneID == "" {
+func (a *AppDrawings) GetParentCollectionID(drawingID string) (string, error) {
+	if drawingID == "" {
 		return "", errors.New("no id passed")
 	}
 
-	query := "SELECT CollectionID FROM Scenes WHERE ID = ?"
-	row := a.DB.QueryRow(query, sceneID)
+	query := "SELECT CollectionID FROM Drawings WHERE ID = ?"
+	row := a.DB.QueryRow(query, drawingID)
 
 	var id string
 	if err := row.Scan(&id); err != nil {
 		if err == sql.ErrNoRows {
-			return "", errors.New("scene not found")
+			return "", errors.New("drawing not found")
 		}
 		log.Printf("Error getting parent collection id: %v", err)
 		return "", err
@@ -163,15 +163,15 @@ func (a *AppScenes) GetParentCollectionID(sceneID string) (string, error) {
 	return id, nil
 }
 
-func (a *AppScenes) DeleteScene(sceneID string) error {
-	if sceneID == "" {
-		return errors.New("no scene passed")
+func (a *AppDrawings) DeleteDrawing(drawingID string) error {
+	if drawingID == "" {
+		return errors.New("no drawing passed")
 	}
 
-	query := "DELETE FROM Scenes WHERE ID = ?"
-	_, err := a.DB.Exec(query, sceneID)
+	query := "DELETE FROM Drawings WHERE ID = ?"
+	_, err := a.DB.Exec(query, drawingID)
 	if err != nil {
-		log.Printf("Error deleting scene: %v", err)
+		log.Printf("Error deleting drawing: %v", err)
 		return err
 	}
 	return nil
