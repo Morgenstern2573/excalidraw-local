@@ -121,6 +121,7 @@ function initExcalidraw() {
               elements: INITIAL_SCENE_DATA["elements"],
               appState: INITIAL_SCENE_DATA["appState"],
             }}
+            autoFocus={true}
           >
             {/* TODO: Remove excalidraw socials from main menu, leave the rest */}
             {/* <MainMenu>

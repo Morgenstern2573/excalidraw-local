@@ -623,6 +623,18 @@ input::placeholder {
   margin-bottom: var(--space-base);
 }
 
+.mb-large {
+  margin-bottom: calc(1.5 * var(--space-base));
+}
+
+.mt-base {
+  margin-top: var(--space-base);
+}
+
+.mb-small {
+  margin-bottom: calc(0.5 * var(--space-base));
+}
+
 .block {
   display: block;
 }
@@ -635,12 +647,24 @@ input::placeholder {
   display: grid;
 }
 
+.hidden {
+  display: none;
+}
+
 .h-0 {
   height: 0px;
 }
 
 .h-screen {
   height: 100vh;
+}
+
+.h-8 {
+  height: 2rem;
+}
+
+.h-6 {
+  height: 1.5rem;
 }
 
 .w-fit {
@@ -654,6 +678,14 @@ input::placeholder {
 
 .w-screen {
   width: 100vw;
+}
+
+.w-8 {
+  width: 2rem;
+}
+
+.w-6 {
+  width: 1.5rem;
 }
 
 .cursor-pointer {
@@ -692,6 +724,10 @@ input::placeholder {
   border-radius: 0.375rem;
 }
 
+.rounded {
+  border-radius: 0.25rem;
+}
+
 .border {
   border-width: 1px;
 }
@@ -728,6 +764,18 @@ input::placeholder {
   padding: calc(1.5 * var(--space-base));
 }
 
+.p-base {
+  padding: var(--space-base);
+}
+
+.p-tiny {
+  padding: calc(0.125 * var(--space-base));
+}
+
+.p-small {
+  padding: calc(0.5 * var(--space-base));
+}
+
 .px-base {
   padding-left: var(--space-base);
   padding-right: var(--space-base);
@@ -736,6 +784,11 @@ input::placeholder {
 .py-small {
   padding-top: calc(0.5 * var(--space-base));
   padding-bottom: calc(0.5 * var(--space-base));
+}
+
+.py-base {
+  padding-top: var(--space-base);
+  padding-bottom: var(--space-base);
 }
 
 .text-center {
@@ -752,6 +805,14 @@ input::placeholder {
 
 .capitalize {
   text-transform: capitalize;
+}
+
+.leading-none {
+  line-height: 1;
+}
+
+.leading-\[0\] {
+  line-height: 0;
 }
 
 .underline {

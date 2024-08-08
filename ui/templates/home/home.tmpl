@@ -29,7 +29,7 @@
 </head>
 {{/* Context is of type ui.IndexPageData */}}
 <body 
-  class="px-base lg:px-large h-screen
+  class="h-screen
     grid md:grid-cols-[1fr_5fr] lg:grid-cols-[1fr_4fr]"
   
   hx-boost="true"
@@ -41,19 +41,24 @@
   }"
 >
   <section 
-    class="sidebar bg-gray-50 h-screen"
+    class="sidebar bg-gray-50 h-screen p-base"
   >
     <div
       x-data="{
         showForm: false
       }"
+      id="new-collection-container"
+      class="mb-base"
     >
-      <button @click="showForm = true">
+      <button 
+        @click="showForm = true"
+        class="w-full"
+      >
         New collection
       </button>
 
       <form
-        class="flex flex-wrap gap-base"
+        class="mt-base flex flex-wrap gap-base"
         hx-post="/new-collection"
         hx-target="#select-collection"
         hx-swap="outerHTML"
@@ -78,8 +83,9 @@
       x-data="{
         showForm: false
       }"
+      class="mb-small"
     >
-      <div class="flex">
+      <div class="flex justify-between gap-base">
         {{ template "home/select-collection" .CollectionsData }}
       
         <button @click="showForm = true">
@@ -88,7 +94,7 @@
       </div>
       
       <form
-        class="flex flex-wrap gap-base"
+        class="flex flex-wrap gap-base mt-base"
         hx-post="/new-scene"
         hx-target="#scene-list"
 
@@ -96,8 +102,8 @@
         x-collapse
       >
         <input
-          type="text"
-          class="invisible h-0 block p-0 m-0"
+          type="hidden"
+          class=""
           name="collection-ID"
           value={{ .CollectionsData.ActiveCollection.ID }}
         >
@@ -123,9 +129,9 @@
   </section>
   <main class="h-screen">
     {{ if .ActiveScene.ID }}
-      <p class="invisible h-0" id="scene-id"> {{.ActiveScene.ID}} </p>
-      <p class="invisible h-0" id="initial-scene-data"> {{.ActiveScene.Data}} </p>
-      <p class="invisible h-0" id="active-collection-id"> {{.ActiveScene.Collection}} </p>
+      <p class="hidden" id="scene-id"> {{.ActiveScene.ID}} </p>
+      <p class="hidden" id="initial-scene-data"> {{.ActiveScene.Data}} </p>
+      <p class="hidden" id="active-collection-id"> {{.ActiveScene.Collection}} </p>
 
 
       <h2 class="text-large font-medium text-center">{{ .ActiveScene.Name }}</h2>
