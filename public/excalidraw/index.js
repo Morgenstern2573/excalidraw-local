@@ -83,7 +83,7 @@ function initExcalidraw() {
   }
 
   const saveDrawingData = debounce(async function (api) {
-    const elems = api.getDrawingElements();
+    const elems = api.getSceneElements();
     const state = api.getAppState();
     let drawingData = ExcalidrawLib.serializeAsJSON(elems, state);
 
