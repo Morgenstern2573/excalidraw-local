@@ -1,0 +1,25 @@
+<div 
+  id="confirm-modal"
+  class="modal-container flex justify-center items-center"
+  x-show="showConfirmModal"
+>
+  <div class="bg-white rounded-md p-large">
+    <p class="mb-base" x-text="confirmText"></label>
+
+    <div class="flex justify-center gap-base">
+      <button 
+        @click="showConfirmModal = false"
+        x-text="confirmButonLabel"
+        :hx-delete="deleteURL"
+        :hx-target="targetSelector"
+      ></button>
+      
+      <button 
+        type="button" 
+        @click="showConfirmModal = false"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>

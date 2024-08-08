@@ -84,7 +84,7 @@ func (a *Application) Index(c echo.Context) error {
 
 	if htmx.IsHxRequest(c.Request()) {
 		if selectedCollection != "" {
-			c.Response().Header().Add("HX-Push-Url", fmt.Sprintf("/?collection=%s", activeCollection.ID))
+			c.Response().Header().Add("HX-Push-Url", fmt.Sprintf("/?select-collection=%s", activeCollection.ID))
 		} else {
 			c.Response().Header().Add("HX-Push-Url", fmt.Sprintf("/?scene=%s", activeScene.ID))
 		}
@@ -198,4 +198,23 @@ func (a *Application) SceneList(c echo.Context) error {
 	}
 
 	return c.Render(http.StatusOK, "home/scene-list", sceneList)
+}
+
+func (a *Application) DeleteScene(c echo.Context) error {
+	sceneID := c.QueryParam("scene-ID")
+
+	if sceneID == "" {
+		return c.String(http.StatusBadRequest, "no scene id found")
+	}
+
+	err := services.Scenes().DeleteScene(sceneID)
+
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	c.Response().Header().Add("HX-Trigger", fmt.Sprintf(`{"deleteScene":%q}`, sceneID))
+
+	return nil
 }

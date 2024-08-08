@@ -29,12 +29,19 @@
 </head>
 {{/* Context is of type ui.IndexPageData */}}
 <body 
-  hx-boost="true"
   class="px-base lg:px-large h-screen
     grid md:grid-cols-[1fr_5fr] lg:grid-cols-[1fr_4fr]"
+  
+  hx-boost="true"
+
+  x-data="{
+    showConfirmModal: false,
+    confirmText: '',
+    confirmButonLabel: '',
+  }"
 >
   <section 
-    class="sidebar bg-gray-50 h-full"
+    class="sidebar bg-gray-50 h-screen"
   >
     <div
       x-data="{
@@ -90,7 +97,7 @@
       >
         <input
           type="text"
-          class="invisible h-0 block"
+          class="invisible h-0 block p-0 m-0"
           name="collection-ID"
           value={{ .CollectionsData.ActiveCollection.ID }}
         >
@@ -114,10 +121,12 @@
       {{ template "home/scene-list" .SceneList }}
     </div>
   </section>
-  <main>
+  <main class="h-screen">
     {{ if .ActiveScene.ID }}
       <p class="invisible h-0" id="scene-id"> {{.ActiveScene.ID}} </p>
       <p class="invisible h-0" id="initial-scene-data"> {{.ActiveScene.Data}} </p>
+      <p class="invisible h-0" id="active-collection-id"> {{.ActiveScene.Collection}} </p>
+
 
       <h2 class="text-large font-medium text-center">{{ .ActiveScene.Name }}</h2>
       <div id="app"></div>
@@ -127,6 +136,9 @@
     {{ end }}
   </main>
 
+  <div id="modal-area" class="-z-10">
+    {{/* template "home/confirm-delete-modal" . */}}
+  </div>
   <script type="text/babel" src="public/excalidraw/index.js"></script>
   <script type="text/babel" src="public/script.js"></script>
 </body>

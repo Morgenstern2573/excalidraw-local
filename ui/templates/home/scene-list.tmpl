@@ -1,13 +1,26 @@
 {{/* Context should be of type []services.Scene */}}
 
 {{ range . }}
-  <a 
-    hx-get="/?scene={{.ID}}"
-    hx-target="body" 
-    class="underline font-medium cursor-pointer w-fit capitalize"
+  <div
+    class="flex justify-between"
+    id="scene-list-{{ .ID }}"
   >
-    {{ .Name }}
-  </a>
+    <a
+      hx-get="/?scene={{.ID}}"
+      hx-target="body"
+      class="underline font-medium cursor-pointer w-fit capitalize"
+    >
+      {{ .Name }}
+    </a>
+
+    <button
+     hx-delete="/?scene-ID={{ .ID }}"
+     hx-target="#scene-list-{{ .ID }}"
+     hx-confirm="Are you sure you want to delete scene {{ .Name }}"
+    >
+      x
+    </button>
+  </div>
 {{ else }}
   <p>Please add a scene</p>
 {{ end }}

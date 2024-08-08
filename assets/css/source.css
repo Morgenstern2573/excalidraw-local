@@ -23,7 +23,7 @@ body {
   }
 
   input {
-    @apply p-base border border-black rounded-md placeholder:text-gray-600;
+    @apply px-base py-small border border-black rounded-md placeholder:text-gray-600;
   }
 
   .modal-container {

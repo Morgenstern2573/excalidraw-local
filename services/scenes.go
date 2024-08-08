@@ -162,3 +162,17 @@ func (a *AppScenes) GetParentCollectionID(sceneID string) (string, error) {
 	}
 	return id, nil
 }
+
+func (a *AppScenes) DeleteScene(sceneID string) error {
+	if sceneID == "" {
+		return errors.New("no scene passed")
+	}
+
+	query := "DELETE FROM Scenes WHERE ID = ?"
+	_, err := a.DB.Exec(query, sceneID)
+	if err != nil {
+		log.Printf("Error deleting scene: %v", err)
+		return err
+	}
+	return nil
+}

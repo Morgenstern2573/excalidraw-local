@@ -568,7 +568,10 @@ input {
   border-width: 1px;
   --tw-border-opacity: 1;
   border-color: rgb(0 0 0 / var(--tw-border-opacity));
-  padding: var(--space-base);
+  padding-left: var(--space-base);
+  padding-right: var(--space-base);
+  padding-top: calc(0.5 * var(--space-base));
+  padding-bottom: calc(0.5 * var(--space-base));
 }
 
 input::-moz-placeholder {
@@ -604,8 +607,20 @@ input::placeholder {
   top: 0px;
 }
 
+.-z-10 {
+  z-index: -10;
+}
+
 .z-10 {
   z-index: 10;
+}
+
+.m-0 {
+  margin: 0px;
+}
+
+.mb-base {
+  margin-bottom: var(--space-base);
 }
 
 .block {
@@ -622,10 +637,6 @@ input::placeholder {
 
 .h-0 {
   height: 0px;
-}
-
-.h-full {
-  height: 100%;
 }
 
 .h-screen {
@@ -657,8 +668,16 @@ input::placeholder {
   flex-wrap: wrap;
 }
 
+.items-center {
+  align-items: center;
+}
+
 .justify-center {
   justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
 }
 
 .gap-base {
@@ -696,13 +715,27 @@ input::placeholder {
   background-color: rgb(249 250 251 / var(--tw-bg-opacity));
 }
 
-.p-base {
-  padding: var(--space-base);
+.bg-white {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.p-0 {
+  padding: 0px;
+}
+
+.p-large {
+  padding: calc(1.5 * var(--space-base));
 }
 
 .px-base {
   padding-left: var(--space-base);
   padding-right: var(--space-base);
+}
+
+.py-small {
+  padding-top: calc(0.5 * var(--space-base));
+  padding-bottom: calc(0.5 * var(--space-base));
 }
 
 .text-center {
