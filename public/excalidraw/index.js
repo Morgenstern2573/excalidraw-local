@@ -87,8 +87,26 @@ function initExcalidraw() {
     const state = api.getAppState();
     let drawingData = ExcalidrawLib.serializeAsJSON(elems, state);
 
+    try {
+      let savedData = localStorage.getItem(DRAWING_ID);
+      if (savedData) {
+        savedData = JSON.parse(savedData);
+        delete savedData["timestamp"];
+
+        savedData = JSON.stringify(savedData);
+        let formattedDrawingData = drawingData.replace(/\s/g, "");
+        console.log(savedData, formattedDrawingData);
+        if (savedData === formattedDrawingData) {
+          console.log("early return");
+          return;
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
+
     drawingData = JSON.parse(drawingData);
-    drawingData["timsetamp"] = Date.now();
+    drawingData["timestamp"] = Date.now();
 
     const JSONDrawingData = JSON.stringify(drawingData);
     try {
@@ -105,7 +123,7 @@ function initExcalidraw() {
     form.append("payload", JSONDrawingData);
 
     navigator.sendBeacon("/update-drawing-data", form);
-  }, 500);
+  }, 1000);
 
   const App = () => {
     const [excalidrawAPI, setExcalidrawAPI] = React.useState(null);
