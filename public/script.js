@@ -16,6 +16,7 @@ document
     window.initExcalidraw();
   });
 
+// TODO: Move this logic into BE
 document
   .querySelector("body")
   .addEventListener("deleteDrawing", function (event) {

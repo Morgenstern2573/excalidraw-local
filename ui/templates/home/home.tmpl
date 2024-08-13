@@ -23,9 +23,6 @@
   crossorigin="anonymous"
 ></script>
 
-<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
 </head>
 {{/* Context is of type ui.IndexPageData */}}
 <body 
@@ -33,26 +30,45 @@
     grid md:grid-cols-[1fr_5fr] lg:grid-cols-[1fr_4fr]"
   
   hx-boost="true"
-
-  x-data="{
-    showConfirmModal: false,
-    confirmText: '',
-    confirmButonLabel: '',
-  }"
 >
-  <section 
-    class="sidebar bg-gray-50 h-screen p-base"
+  
+  {{ template "sidebar" . }}
+
+  <main class="h-screen">
+    {{ if .ActiveDrawing.ID }}
+      <p class="hidden" id="drawing-id"> {{.ActiveDrawing.ID}} </p>
+      <p class="hidden" id="initial-drawing-data"> {{.ActiveDrawing.Data}} </p>
+      <p class="hidden" id="active-collection-id"> {{.ActiveDrawing.Collection}} </p>
+
+
+      <h2 class="text-large font-medium text-center">{{ .ActiveDrawing.Name }}</h2>
+      <div id="app"></div>
+    
+    {{ else }}
+      <p>Select a drawing from the sidebar</p>
+    {{ end }}
+  </main>
+
+  <div id="modal-area" class="-z-10">
+  </div>
+
+  <script type="module" src="public/stimulus/index.js"></script>
+  <script type="text/babel" src="public/excalidraw/index.js"></script>
+  <script type="text/babel" src="public/script.js"></script>
+</body>
+</html>
+
+{{ define "sidebar" }}
+<section 
+  class="bg-gray-50 h-screen p-base"
+>
+  <div
+    data-controller="toggleVisibility"
   >
-    <div
-      x-data="{
-        showForm: false
-      }"
-      id="new-collection-container"
-      class="mb-base"
-    >
       <button 
         @click="showForm = true"
         class="w-full"
+        data-action="toggleVisibility#showContent"
       >
         New collection
       </button>
@@ -63,8 +79,7 @@
         hx-target="#select-collection"
         hx-swap="outerHTML"
 
-        x-show="showForm"
-        x-collapse
+        data-toggleVisibility-target="content"
       >
         <input
           type="text"
@@ -74,21 +89,21 @@
           placeholder="Collection Name"
         >
       
-        <button @click="showForm = false">Save</button>
-        <button type="button" @click="showForm = false">Cancel</button>
+        <button data-action="toggleVisibility#hideContent" >Save</button>
+        <button type="button" data-action="toggleVisibility#hideContent">Cancel</button>
       </form>
-    </div>
+  </div>
     
     <div
-      x-data="{
-        showForm: false
-      }"
+      data-controller="toggleVisibility"
       class="mb-small"
     >
       <div class="flex justify-between gap-base">
         {{ template "home/select-collection" .CollectionsData }}
       
-        <button @click="showForm = true">
+        <button 
+          data-action="toggleVisibility#showContent"
+        >
           +
         </button>
       </div>
@@ -97,9 +112,8 @@
         class="flex flex-wrap gap-base mt-base"
         hx-post="/new-drawing"
         hx-target="#drawing-list"
-
-        x-show="showForm"
-        x-collapse
+       
+        data-toggleVisibility-target="content"     
       >
         <input
           type="hidden"
@@ -115,8 +129,17 @@
           required
         >
         
-        <button @click="showForm = false">Save</button>
-        <button type="button" @click="showForm = false">Cancel</button>
+        <button 
+        >
+          Save
+        </button>
+
+        <button 
+          type="button"
+          data-action="toggleVisibility#hideContent"
+        >
+          Cancel
+        </button>
       </form>
     </div>
 
@@ -127,25 +150,4 @@
       {{ template "home/drawing-list" .DrawingList }}
     </div>
   </section>
-  <main class="h-screen">
-    {{ if .ActiveDrawing.ID }}
-      <p class="hidden" id="drawing-id"> {{.ActiveDrawing.ID}} </p>
-      <p class="hidden" id="initial-drawing-data"> {{.ActiveDrawing.Data}} </p>
-      <p class="hidden" id="active-collection-id"> {{.ActiveDrawing.Collection}} </p>
-
-
-      <h2 class="text-large font-medium text-center">{{ .ActiveDrawing.Name }}</h2>
-      <div id="app"></div>
-    
-    {{ else }}
-      <p>Select a drawing to start drawing</p>
-    {{ end }}
-  </main>
-
-  <div id="modal-area" class="-z-10">
-    {{/* template "home/confirm-delete-modal" . */}}
-  </div>
-  <script type="text/babel" src="public/excalidraw/index.js"></script>
-  <script type="text/babel" src="public/script.js"></script>
-</body>
-</html>
+{{ end }}
