@@ -1,0 +1,27 @@
+{{/* extends "base" */}}
+
+{{ block "content" . }}
+  <h1 class="text-large mb-large">
+    Login to App
+  </h1>
+
+  <form 
+    action="/login"
+    method="POST"
+    class="space-x-base"
+  >
+    <input 
+      type="email" 
+      name="email"
+      placeholder="Enter email..." 
+      id=""
+    >
+
+    <input 
+      type="password" 
+      name="password"
+      placeholder="Enter password..." 
+      id=""
+    >
+  </form>
+{{ end }}
