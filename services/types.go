@@ -1,6 +1,21 @@
 package services
 
-import "database/sql"
+import (
+	"database/sql"
+)
+
+type AppServices struct {
+	Drawings    DrawingSvc
+	Collections CollectionsSvc
+	Users       UserSvc
+}
+
+type UserSvc interface {
+	CreateUser(email, pwdHash string) (User, error)
+	GetUser(email string) (User, error)
+	DeleteUser(email string) error
+	UpdateUser(column, data string) error
+}
 
 type DrawingSvc interface {
 	CreateDrawing(collectionID, name string) (Drawing, error)
@@ -23,6 +38,15 @@ type AppDrawings struct {
 
 type AppCollections struct {
 	DB *sql.DB
+}
+
+type AppUsers struct {
+	DB *sql.DB
+}
+
+type User struct {
+	Email        string
+	PasswordHash string
 }
 
 type Collection struct {

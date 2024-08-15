@@ -8,16 +8,12 @@ import (
 	"math/rand"
 )
 
-type AppServices struct {
-	Drawings    DrawingSvc
-	Collections CollectionsSvc
-}
-
 var ServiceLayer AppServices
 
 func Init(db *sql.DB) {
 
 	ServiceLayer = AppServices{
+		Users:       &AppUsers{DB: db},
 		Drawings:    &AppDrawings{DB: db},
 		Collections: &AppCollections{DB: db},
 	}
