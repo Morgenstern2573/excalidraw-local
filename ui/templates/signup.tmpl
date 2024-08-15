@@ -1,0 +1,34 @@
+{{/* extends "base" */}}
+
+{{ block "content" . }}
+  <h1 class="text-large mb-large">
+    Signup
+  </h1>
+
+  <form 
+    action="/signup"
+    method="POST"
+    class="space-x-base"
+  >
+    <input 
+      type="email" 
+      name="email"
+      placeholder="Enter email..." 
+      id=""
+    >
+
+    <input 
+      type="password" 
+      name="password"
+      placeholder="Enter password..." 
+      id=""
+    >
+
+    <input 
+      type="password" 
+      name="confrim-password"
+      placeholder="Enter password again..." 
+      id=""
+    >
+  </form>
+{{ end }}
