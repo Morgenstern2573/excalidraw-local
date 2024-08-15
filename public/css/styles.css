@@ -595,10 +595,6 @@ input::placeholder {
   background-color: rgb(0 0 0 / 0.5);
 }
 
-.collapse {
-  visibility: collapse;
-}
-
 .static {
   position: static;
 }
