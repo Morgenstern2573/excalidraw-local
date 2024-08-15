@@ -10,6 +10,53 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+func (a *Application) RenderLogin(c echo.Context) error {
+	return c.Render(http.StatusOK, "login", nil)
+}
+
+func (a *Application) RenderRegister(c echo.Context) error {
+	return c.Render(http.StatusOK, "register", nil)
+}
+
+func (a *Application) RegisterUser(c echo.Context) error {
+	type FormData struct {
+		Email             string `form:"email"`
+		Password          string `form:"password"`
+		ConfirmedPassword string `form:"confirm-password"`
+	}
+
+	var formData FormData
+
+	err := c.Bind(&formData)
+
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	if formData.Email == "" ||
+		formData.Password == "" ||
+		formData.ConfirmedPassword == "" {
+		return c.String(http.StatusBadRequest, "required param not found")
+	}
+
+	pageData := ui.AuthPageData{}
+
+	if formData.Password != formData.ConfirmedPassword {
+		pageData.Error = "Password and confirm password don't match"
+		return c.Render(http.StatusOK, "register", pageData)
+	}
+
+	_, err = services.Users().CreateUser(formData.Email, formData.Password)
+
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	return c.Redirect(http.StatusFound, "/")
+}
+
 func (a *Application) Index(c echo.Context) error {
 	drawingID := c.QueryParam("drawing")
 	selectedCollection := c.QueryParam("select-collection")

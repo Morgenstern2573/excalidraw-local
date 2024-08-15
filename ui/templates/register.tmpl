@@ -1,14 +1,22 @@
 {{/* extends "auth-base" */}}
 
+{{/* Context should be of type ui.AuthPageData */}}
+
 {{ block "content" . }}
   <h1 
-    class="text-large text-center my-large"
+    class="text-large my-large text-center"
   >
-    Login to App
+    Signup
   </h1>
 
+  {{ if .Error }}
+    <p class="text-red-900">
+      {{ .Error }}
+    </p>
+  {{ end }}
+
   <form 
-    action="/login"
+    action="/register"
     method="POST"
     class="flex flex-col gap-base w-fit mx-auto"
   >
@@ -23,6 +31,13 @@
       type="password" 
       name="password"
       placeholder="Enter password..." 
+      required
+    >
+
+    <input 
+      type="password" 
+      name="confirm-password"
+      placeholder="Enter password again..." 
       required
     >
 

@@ -12,3 +12,7 @@ type IndexPageData struct {
 	DrawingList     []services.Drawing
 	CollectionsData IndexCollections
 }
+
+type AuthPageData struct {
+	Error string
+}

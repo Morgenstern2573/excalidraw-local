@@ -44,3 +44,7 @@ func Drawings() DrawingSvc {
 func Collections() CollectionsSvc {
 	return ServiceLayer.Collections
 }
+
+func Users() UserSvc {
+	return ServiceLayer.Users
+}

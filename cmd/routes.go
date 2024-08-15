@@ -1,6 +1,10 @@
 package main
 
 func (a *Application) SetupRouting() {
+	a.Server.GET("/login", a.RenderLogin)
+	a.Server.GET("/register", a.RenderRegister)
+	a.Server.POST("/register", a.RegisterUser)
+
 	a.Server.GET("/", a.Index)
 	a.Server.POST("/new-drawing", a.NewDrawing)
 	a.Server.POST("update-drawing-data", a.UpdateDrawingData)
