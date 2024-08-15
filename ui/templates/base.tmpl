@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Excalidraw:Local</title>
+
+  <link rel="stylesheet" href="/public/css/styles.css">
+
+  {{ block "head-scripts" . }}
+  {{ end}}
+
+  <script 
+    src="https://unpkg.com/htmx.org@2.0.1" 
+    integrity="sha384-QWGpdj554B4ETpJJC9z+ZHJcA/i59TyjxEPXiiUgN2WmTyV5OEZWCD6gQhgkdpB/" 
+    crossorigin="anonymous"
+  ></script>
+</head>
+
+<body
+  class="{{ block "body-class" . }} {{ end }}"
+  hx-boost="true"
+>
+
+{{ block "content" . }}
+{{ end }}
+
+</body>
+</html>
