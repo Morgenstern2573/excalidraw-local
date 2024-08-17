@@ -5,6 +5,8 @@ import (
 	"log"
 
 	"github.com/actanonv/excalidraw-local/services"
+	"github.com/gorilla/sessions"
+	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/mattn/go-sqlite3"
@@ -32,6 +34,8 @@ func main() {
 
 	app := &Application{Server: echo.New()}
 	app.Server.HideBanner = true
+	app.Server.Use(session.Middleware(sessions.NewCookieStore([]byte("internal_secret_super_secret"))))
+
 	app.SetupRenderer()
 	app.SetupRouting()
 	app.Server.Use(middleware.Logger())

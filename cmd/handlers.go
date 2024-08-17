@@ -7,6 +7,7 @@ import (
 	"github.com/actanonv/excalidraw-local/services"
 	"github.com/actanonv/excalidraw-local/ui"
 	"github.com/donseba/go-htmx"
+	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 )
 
@@ -54,7 +55,56 @@ func (a *Application) RegisterUser(c echo.Context) error {
 		return err
 	}
 
-	return c.Redirect(http.StatusFound, "/")
+	return c.Redirect(http.StatusFound, "/app")
+}
+
+func (a *Application) LoginUser(c echo.Context) error {
+	type FormData struct {
+		Email    string `form:"email"`
+		Password string `form:"password"`
+	}
+
+	var formData FormData
+
+	err := c.Bind(&formData)
+
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	if formData.Email == "" ||
+		formData.Password == "" {
+		return c.String(http.StatusBadRequest, "required param not found")
+	}
+
+	user, err := services.Users().GetUser(formData.Email)
+
+	pageData := ui.AuthPageData{}
+
+	if err != nil {
+		pageData.Error = "incorrect username or password"
+		return c.Render(http.StatusOK, "login", pageData)
+	}
+
+	if formData.Password != user.PasswordHash {
+		pageData.Error = "incorrect username or password"
+		return c.Render(http.StatusOK, "login", pageData)
+	}
+
+	sess, err := session.Get("session", c)
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	sess.Values["userEmail"] = user.Email
+	if err := sess.Save(c.Request(), c.Response()); err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	return c.Redirect(http.StatusFound, "/app")
 }
 
 func (a *Application) Index(c echo.Context) error {
