@@ -8,16 +8,18 @@ CREATE TABLE Collections(
 );
 
 CREATE TABLE Drawings(
-  Name TEXT, 
+  Name TEXT,
   CollectionID TEXT, 
-  ID TEXT,
+  ID TEXT PRIMARY KEY,
   Data TEXT, 
   FOREIGN KEY(CollectionID) REFERENCES Collections(ID),
-  PRIMARY KEY(Name, CollectionID)
+  UNIQUE(Name, CollectionID)
 );
 
 CREATE TABLE Users(
-  Name TEXT,
-  Email TEXT PRIMARY KEY,
+  ID TEXT PRIMARY KEY,
+  FirstName TEXT,
+  LastName TEXT,
+  Email TEXT UNIQUE,
   PasswordHash TEXT NOT NULL
 );

@@ -1,9 +1,9 @@
 package main
 
 import (
-	"log"
 	"net/http"
 
+	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 )
@@ -11,14 +11,17 @@ import (
 func (a *Application) SetupRouting() {
 	routeProtector := func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			sess, err := session.Get("session", c)
-			if err != nil {
+			var (
+				err  error
+				sess *sessions.Session
+			)
+
+			if sess, err = session.Get("session", c); err != nil {
 				a.Server.Logger.Error(err)
 				return c.Redirect(http.StatusMovedPermanently, "/login")
 			}
 
-			log.Println(sess.Values["userEmail"])
-			if sess.Values["userEmail"] == nil {
+			if sess.Values["userID"] == nil {
 				a.Server.Logger.Info("no user id found in session")
 				return c.Redirect(http.StatusMovedPermanently, "/login")
 			}
@@ -34,10 +37,9 @@ func (a *Application) SetupRouting() {
 	a.Server.GET("/register", a.RenderRegister)
 	a.Server.POST("/register", a.RegisterUser)
 
-	appRoutes := a.Server.Group("/app")
-	appRoutes.Use(routeProtector)
+	appRoutes := a.Server.Group("/app", routeProtector)
 	appRoutes.GET("", a.Index)
-	appRoutes.POST("/new-drawing", a.NewDrawing)
+	appRoutes.POST("/new-drawing", a.CreateDrawing)
 	appRoutes.POST("update-drawing-data", a.UpdateDrawingData)
 	appRoutes.POST("/new-collection", a.NewCollection)
 	appRoutes.GET("/drawing-list", a.DrawingList)

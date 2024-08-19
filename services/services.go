@@ -8,11 +8,11 @@ import (
 	"math/rand"
 )
 
-var ServiceLayer AppServices
+var serviceLayer AppServices
 
 func Init(db *sql.DB) {
 
-	ServiceLayer = AppServices{
+	serviceLayer = AppServices{
 		Users:       &AppUsers{DB: db},
 		Drawings:    &AppDrawings{DB: db},
 		Collections: &AppCollections{DB: db},
@@ -38,13 +38,13 @@ func generateID() string {
 }
 
 func Drawings() DrawingSvc {
-	return ServiceLayer.Drawings
+	return serviceLayer.Drawings
 }
 
 func Collections() CollectionsSvc {
-	return ServiceLayer.Collections
+	return serviceLayer.Collections
 }
 
 func Users() UserSvc {
-	return ServiceLayer.Users
+	return serviceLayer.Users
 }

@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-func (u *AppUsers) CreateUser(email, passwordHash string) (User, error) {
+func (u *AppUsers) CreateUser(firstName, lastName, email, passwordHash string) (User, error) {
 	if email == "" {
 		return User{}, errors.New("no email passed")
 	}
@@ -14,8 +14,10 @@ func (u *AppUsers) CreateUser(email, passwordHash string) (User, error) {
 		return User{}, errors.New("no password hash passed")
 	}
 
-	query := "INSERT INTO Users (Email, PasswordHash) VALUES (?, ?)"
-	_, err := u.DB.Exec(query, email, passwordHash)
+	ID := generateID()
+
+	query := "INSERT INTO Users (FirstName, LastName, ID, Email, PasswordHash) VALUES (?, ?, ?, ?, ?)"
+	_, err := u.DB.Exec(query, firstName, lastName, ID, email, passwordHash)
 	if err != nil {
 		log.Printf("Error creating user: %v", err)
 		return User{}, err
@@ -28,16 +30,16 @@ func (u *AppUsers) GetUser(email string) (User, error) {
 		return User{}, errors.New("no email passed")
 	}
 
-	query := "SELECT PasswordHash FROM Users WHERE Email = ?"
+	query := "SELECT FirstName, LastName, ID, Email, PasswordHash FROM Users WHERE Email = ?"
 	row := u.DB.QueryRow(query, email)
-	var pwdHash string
-	err := row.Scan(&pwdHash)
+	var user User
+	err := row.Scan(&user)
 
 	if err != nil {
 		return User{}, err
 	}
 
-	return User{Email: email, PasswordHash: pwdHash}, nil
+	return user, nil
 }
 
 func (u *AppUsers) DeleteUser(email string) error {

@@ -6,193 +6,11 @@ import (
 
 	"github.com/actanonv/excalidraw-local/services"
 	"github.com/actanonv/excalidraw-local/ui"
-	"github.com/donseba/go-htmx"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 )
 
-func (a *Application) RenderLogin(c echo.Context) error {
-	return c.Render(http.StatusOK, "login", nil)
-}
-
-func (a *Application) RenderRegister(c echo.Context) error {
-	return c.Render(http.StatusOK, "register", nil)
-}
-
-func (a *Application) RegisterUser(c echo.Context) error {
-	type FormData struct {
-		Email             string `form:"email"`
-		Password          string `form:"password"`
-		ConfirmedPassword string `form:"confirm-password"`
-	}
-
-	var formData FormData
-
-	err := c.Bind(&formData)
-
-	if err != nil {
-		a.Server.Logger.Error(err)
-		return err
-	}
-
-	if formData.Email == "" ||
-		formData.Password == "" ||
-		formData.ConfirmedPassword == "" {
-		return c.String(http.StatusBadRequest, "required param not found")
-	}
-
-	pageData := ui.AuthPageData{}
-
-	if formData.Password != formData.ConfirmedPassword {
-		pageData.Error = "Password and confirm password don't match"
-		return c.Render(http.StatusOK, "register", pageData)
-	}
-
-	_, err = services.Users().CreateUser(formData.Email, formData.Password)
-
-	if err != nil {
-		a.Server.Logger.Error(err)
-		return err
-	}
-
-	return c.Redirect(http.StatusFound, "/app")
-}
-
-func (a *Application) LoginUser(c echo.Context) error {
-	type FormData struct {
-		Email    string `form:"email"`
-		Password string `form:"password"`
-	}
-
-	var formData FormData
-
-	err := c.Bind(&formData)
-
-	if err != nil {
-		a.Server.Logger.Error(err)
-		return err
-	}
-
-	if formData.Email == "" ||
-		formData.Password == "" {
-		return c.String(http.StatusBadRequest, "required param not found")
-	}
-
-	user, err := services.Users().GetUser(formData.Email)
-
-	pageData := ui.AuthPageData{}
-
-	if err != nil {
-		pageData.Error = "incorrect username or password"
-		return c.Render(http.StatusOK, "login", pageData)
-	}
-
-	if formData.Password != user.PasswordHash {
-		pageData.Error = "incorrect username or password"
-		return c.Render(http.StatusOK, "login", pageData)
-	}
-
-	sess, err := session.Get("session", c)
-	if err != nil {
-		a.Server.Logger.Error(err)
-		return err
-	}
-
-	sess.Values["userEmail"] = user.Email
-	if err := sess.Save(c.Request(), c.Response()); err != nil {
-		a.Server.Logger.Error(err)
-		return err
-	}
-
-	return c.Redirect(http.StatusFound, "/app")
-}
-
-func (a *Application) Index(c echo.Context) error {
-	drawingID := c.QueryParam("drawing")
-	selectedCollection := c.QueryParam("select-collection")
-
-	var activeDrawing services.Drawing
-	var activeCollection services.Collection
-	var err error
-
-	if drawingID == "" {
-		activeDrawing = services.Drawing{}
-	} else {
-		activeDrawing, err = services.Drawings().GetDrawing(drawingID)
-
-		if err != nil {
-			a.Server.Logger.Error(err)
-
-			if err.Error() == "drawing not found" {
-				return c.String(http.StatusNotFound, "404 not found")
-			}
-
-			return err
-		}
-	}
-
-	if selectedCollection != "" {
-		activeCollection, err = services.Collections().GetCollection(selectedCollection)
-		if err != nil && err.Error() == "collection not found" {
-			return c.String(http.StatusNotFound, "Collection not found")
-		} else if err != nil {
-			a.Server.Logger.Error(err)
-			return err
-		}
-	} else if drawingID != "" {
-		activeCollection, err = services.Collections().GetCollection(activeDrawing.Collection)
-
-		if err != nil && err.Error() == "collection not found" {
-			return c.String(http.StatusNotFound, "Collection not found")
-		} else if err != nil {
-			a.Server.Logger.Error(err)
-			return err
-		}
-	} else {
-		activeCollection, err = services.Collections().GetCollection("default")
-
-		if err != nil {
-			a.Server.Logger.Error(err)
-			return err
-		}
-	}
-
-	appCollections, err := services.Collections().GetCollections()
-
-	if err != nil {
-		a.Server.Logger.Error(err)
-		return err
-	}
-
-	drawingList, err := services.Drawings().GetDrawings(activeCollection.ID)
-	if err != nil {
-		a.Server.Logger.Error(err)
-		return err
-	}
-
-	pageData := ui.IndexPageData{
-		ActiveDrawing: activeDrawing,
-		DrawingList:   drawingList,
-		CollectionsData: ui.IndexCollections{
-			ActiveCollection: activeCollection,
-			CollectionsList:  appCollections,
-		},
-	}
-
-	if htmx.IsHxRequest(c.Request()) {
-		if selectedCollection != "" {
-			c.Response().Header().Add("HX-Push-Url", fmt.Sprintf("/?select-collection=%s", activeCollection.ID))
-		} else {
-			c.Response().Header().Add("HX-Push-Url", fmt.Sprintf("/?drawing=%s", activeDrawing.ID))
-		}
-
-		c.Response().Header().Add("HX-Trigger-After-Swap", "initExcalidraw")
-	}
-
-	return c.Render(http.StatusOK, "home", pageData)
-}
-
-func (a *Application) NewDrawing(c echo.Context) error {
+func (a *Application) CreateDrawing(c echo.Context) error {
 	type FormData struct {
 		CollectionID string `form:"collection-ID"`
 		DrawingName  string `form:"drawing-name"`
@@ -225,21 +43,39 @@ func (a *Application) NewDrawing(c echo.Context) error {
 }
 
 func (a *Application) UpdateDrawingData(c echo.Context) error {
+	sess, err := session.Get("session", c)
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	var userID string
+	userID, ok := sess.Values["userID"].(string)
+	if !ok {
+		return c.Redirect(http.StatusMovedPermanently, "/login")
+	}
+
 	type DrawingData struct {
 		ID   string `form:"drawing"`
 		Data string `form:"payload"`
 	}
 
-	scData := DrawingData{}
-	err := c.Bind(&scData)
+	drawingData := DrawingData{}
+	err = c.Bind(&drawingData)
 
 	if err != nil {
 		a.Server.Logger.Error(err)
 		return err
 	}
 
-	err = services.Drawings().UpdateDrawingData(scData.ID, scData.Data)
+	err = services.Drawings().UpdateDrawingData(drawingData.ID, drawingData.Data)
 
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	err = a.Presence.UserAtDrawing(userID, drawingData.ID)
 	if err != nil {
 		a.Server.Logger.Error(err)
 		return err
