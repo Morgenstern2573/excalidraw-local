@@ -78,7 +78,7 @@ func makePresenceMap(drawingList []services.Drawing, users map[string]*PresenceD
 				if found {
 					presenceMap[details.LastDrawing] = append(presenceMap[details.LastDrawing], displayName)
 				} else {
-					presenceMap[details.LastDrawing] = []string{details.UserID}
+					presenceMap[details.LastDrawing] = []string{displayName}
 				}
 
 				break
