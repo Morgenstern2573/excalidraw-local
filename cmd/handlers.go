@@ -39,7 +39,7 @@ func (a *Application) CreateDrawing(c echo.Context) error {
 		return err
 	}
 
-	return c.Render(http.StatusOK, "home/drawing-list", updatedDrawingList)
+	return c.Render(http.StatusOK, "home/drawing-list", ui.DrawingListData{DrawingList: updatedDrawingList})
 }
 
 func (a *Application) UpdateDrawingData(c echo.Context) error {
@@ -84,7 +84,7 @@ func (a *Application) UpdateDrawingData(c echo.Context) error {
 	return nil
 }
 
-func (a *Application) NewCollection(c echo.Context) error {
+func (a *Application) CreateCollection(c echo.Context) error {
 	type FormData struct {
 		CollectionName string `form:"collection-name"`
 	}
@@ -118,7 +118,7 @@ func (a *Application) NewCollection(c echo.Context) error {
 	})
 }
 
-func (a *Application) DrawingList(c echo.Context) error {
+func (a *Application) UpdatePresenceIndicators(c echo.Context) error {
 	collectionID := c.QueryParam("collection-id")
 	if collectionID == "" {
 		return c.String(http.StatusBadRequest, "collection id not found")
@@ -130,7 +130,24 @@ func (a *Application) DrawingList(c echo.Context) error {
 		return err
 	}
 
-	return c.Render(http.StatusOK, "home/drawing-list", drawingList)
+	presenceMap := make(map[string][]string)
+
+	for _, details := range a.Presence.Users {
+		for _, drawing := range drawingList {
+			if details.LastDrawing == drawing.ID {
+				_, found := presenceMap[details.LastDrawing]
+				if found {
+					presenceMap[details.LastDrawing] = append(presenceMap[details.LastDrawing], details.UserID)
+				} else {
+					presenceMap[details.LastDrawing] = []string{details.UserID}
+				}
+
+				break
+			}
+		}
+	}
+
+	return c.Render(http.StatusOK, "home/drawing-list", ui.DrawingListData{DrawingList: drawingList, PresenceMap: presenceMap})
 }
 
 func (a *Application) DeleteDrawing(c echo.Context) error {

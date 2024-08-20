@@ -7,10 +7,15 @@ type IndexCollections struct {
 	ActiveCollection services.Collection
 }
 
+type DrawingListData struct {
+	DrawingList []services.Drawing
+	PresenceMap map[string][]string
+}
+
 type IndexPageData struct {
 	ActiveDrawing   services.Drawing
-	DrawingList     []services.Drawing
 	CollectionsData IndexCollections
+	DrawingListData DrawingListData
 }
 
 type AuthPageData struct {

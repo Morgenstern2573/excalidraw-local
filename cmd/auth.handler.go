@@ -114,7 +114,7 @@ func (a *Application) LoginUser(c echo.Context) error {
 	}
 
 	d := PresenceDetails{
-		UserID:     user.Email,
+		UserID:     user.ID,
 		Name:       user.Email,
 		login:      time.Now(),
 		lastUpdate: time.Now(),

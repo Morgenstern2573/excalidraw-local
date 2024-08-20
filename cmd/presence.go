@@ -6,6 +6,12 @@ import (
 	"time"
 )
 
+func newPresence() *Presence {
+	var lock sync.Mutex
+	users := make(map[string]*PresenceDetails)
+	return &Presence{lock: &lock, Users: users}
+}
+
 type PresenceDetails struct {
 	UserID      string `json:"id"`
 	Name        string `json:"name"`
@@ -23,13 +29,19 @@ func (p *Presence) AddUser(user *PresenceDetails) {
 	p.lock.Lock()
 	defer p.lock.Unlock()
 
-	user, found := p.Users[user.UserID]
-	if !found {
-		p.Users[user.UserID] = user
-		user.login = time.Now()
+	_, found := p.Users[user.UserID]
+	if found {
+		return
 	}
 
+	p.Users[user.UserID] = user
+	user.login = time.Now()
 	user.lastUpdate = time.Now()
+}
+
+func (p *Presence) IsUserPresent(userID string) bool {
+	_, found := p.Users[userID]
+	return found
 }
 
 func (p *Presence) RemoveUser(user *PresenceDetails) {}

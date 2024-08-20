@@ -122,7 +122,7 @@ function initExcalidraw() {
     form.append("drawing", DRAWING_ID);
     form.append("payload", JSONDrawingData);
 
-    navigator.sendBeacon("/update-drawing-data", form);
+    navigator.sendBeacon("/app/update-drawing-data", form);
   }, 1000);
 
   const App = () => {

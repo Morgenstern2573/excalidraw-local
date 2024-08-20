@@ -62,7 +62,7 @@
 
       <form
         class="mt-base flex flex-wrap gap-base"
-        hx-post="/new-collection"
+        hx-post="/app/create-collection"
         hx-target="#select-collection"
         hx-swap="outerHTML"
 
@@ -97,7 +97,7 @@
       
       <form
         class="flex flex-wrap gap-base mt-base"
-        hx-post="/new-drawing"
+        hx-post="/app/new-drawing"
         hx-target="#drawing-list"
        
         data-toggleVisibility-target="content"     
@@ -134,7 +134,7 @@
       id="drawing-list" 
       class="flex flex-col gap-small"
     >
-      {{ template "home/drawing-list" .DrawingList }}
+      {{ template "home/drawing-list" .DrawingListData }}
     </div>
   </section>
 {{ end }}

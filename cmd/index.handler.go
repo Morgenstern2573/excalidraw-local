@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/actanonv/excalidraw-local/services"
 	"github.com/actanonv/excalidraw-local/ui"
@@ -86,8 +87,8 @@ func (a *Application) Index(c echo.Context) error {
 	}
 
 	pageData := ui.IndexPageData{
-		ActiveDrawing: activeDrawing,
-		DrawingList:   drawingList,
+		ActiveDrawing:   activeDrawing,
+		DrawingListData: ui.DrawingListData{DrawingList: drawingList, PresenceMap: nil},
 		CollectionsData: ui.IndexCollections{
 			ActiveCollection: activeCollection,
 			CollectionsList:  appCollections,
@@ -96,15 +97,30 @@ func (a *Application) Index(c echo.Context) error {
 
 	if htmx.IsHxRequest(c.Request()) {
 		if selectedCollection != "" {
-			c.Response().Header().Add("HX-Push-Url", fmt.Sprintf("/?select-collection=%s", activeCollection.ID))
+			c.Response().Header().Add("HX-Push-Url", fmt.Sprintf("/app?select-collection=%s", activeCollection.ID))
 		} else {
-			c.Response().Header().Add("HX-Push-Url", fmt.Sprintf("/?drawing=%s", activeDrawing.ID))
+			c.Response().Header().Add("HX-Push-Url", fmt.Sprintf("/app?drawing=%s", activeDrawing.ID))
 		}
 
 		c.Response().Header().Add("HX-Trigger-After-Swap", "initExcalidraw")
 	}
 
-	err = a.Presence.UserAtDrawing(userID, drawingID)
+	if a.Presence.IsUserPresent(userID) {
+		err = a.Presence.UserAtDrawing(userID, drawingID)
+	} else {
+		d := PresenceDetails{
+			UserID:     userID,
+			Name:       "rando",
+			login:      time.Now(),
+			lastUpdate: time.Now(),
+		}
+
+		if drawingID != "" {
+			d.LastDrawing = drawingID
+		}
+
+		a.Presence.AddUser(&d)
+	}
 	if err != nil {
 		a.Server.Logger.Error(err)
 		return err

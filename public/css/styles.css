@@ -637,10 +637,6 @@ input::placeholder {
   margin-top: var(--space-base);
 }
 
-.mb-large {
-  margin-bottom: calc(1.5 * var(--space-base));
-}
-
 .block {
   display: block;
 }
@@ -716,12 +712,6 @@ input::placeholder {
 
 .gap-small {
   gap: calc(0.5 * var(--space-base));
-}
-
-.space-x-base > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-x-reverse: 0;
-  margin-right: calc(var(--space-base) * var(--tw-space-x-reverse));
-  margin-left: calc(var(--space-base) * calc(1 - var(--tw-space-x-reverse)));
 }
 
 .rounded {

@@ -22,7 +22,7 @@ func (u *AppUsers) CreateUser(firstName, lastName, email, passwordHash string) (
 		log.Printf("Error creating user: %v", err)
 		return User{}, err
 	}
-	return User{Email: email, PasswordHash: passwordHash}, nil
+	return User{FirstName: firstName, LastName: lastName, ID: ID, Email: email, PasswordHash: passwordHash}, nil
 }
 
 func (u *AppUsers) GetUser(email string) (User, error) {
@@ -33,7 +33,7 @@ func (u *AppUsers) GetUser(email string) (User, error) {
 	query := "SELECT FirstName, LastName, ID, Email, PasswordHash FROM Users WHERE Email = ?"
 	row := u.DB.QueryRow(query, email)
 	var user User
-	err := row.Scan(&user)
+	err := row.Scan(&user.FirstName, &user.LastName, &user.ID, &user.Email, &user.PasswordHash)
 
 	if err != nil {
 		return User{}, err

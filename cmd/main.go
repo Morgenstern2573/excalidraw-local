@@ -24,7 +24,7 @@ func main() {
 
 	services.Init(db)
 
-	app := &Application{Server: echo.New(), Presence: new(Presence)}
+	app := &Application{Server: echo.New(), Presence: newPresence()}
 	app.Server.HideBanner = true
 	// replace with env variable
 	app.Server.Use(session.Middleware(sessions.NewCookieStore([]byte("internal_secret_super_secret"))))

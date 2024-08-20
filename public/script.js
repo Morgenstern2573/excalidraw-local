@@ -27,7 +27,7 @@ document
 
     console.log(activeDrawing, deletedDrawing);
     if (activeDrawing === deletedDrawing) {
-      let url = `/?select-collection=${document
+      let url = `/app?select-collection=${document
         .getElementById("active-collection-id")
         .innerHTML.trim()}`;
       window.location.href = url;

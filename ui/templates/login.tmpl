@@ -7,6 +7,12 @@
     Login to App
   </h1>
 
+  {{ if .Error }}
+    <p class="text-red-900">
+      {{ .Error }}
+    </p>
+  {{ end }}
+
   <form 
     action="/login"
     method="POST"
