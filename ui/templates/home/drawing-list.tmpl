@@ -16,7 +16,8 @@
     {{ if (index $.PresenceMap .ID) }}
       {{ range (index $.PresenceMap .ID) }}
           <div 
-            class="rounded-full w-4 h-4 border border-black"
+            class="rounded-full w-5 h-5 flex flex-center 
+            text-vSmall border border-black"
             title="{{ .Name }}"
           >
             {{ .Initials }}

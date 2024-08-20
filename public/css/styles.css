@@ -669,6 +669,10 @@ input::placeholder {
   height: 100vh;
 }
 
+.h-5 {
+  height: 1.25rem;
+}
+
 .w-4 {
   width: 1rem;
 }
@@ -688,6 +692,10 @@ input::placeholder {
 
 .w-screen {
   width: 100vw;
+}
+
+.w-5 {
+  width: 1.25rem;
 }
 
 .cursor-pointer {
@@ -790,6 +798,10 @@ input::placeholder {
 
 .text-large {
   font-size: calc(1.5 * var(--fontSize-base));
+}
+
+.text-vSmall {
+  font-size: calc(0.5 * var(--fontSize-base));
 }
 
 .font-medium {

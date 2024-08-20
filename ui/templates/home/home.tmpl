@@ -133,6 +133,9 @@
     <div
       id="drawing-list" 
       class="flex flex-col gap-small"
+      hx-get="/app/presence-update?collection-id={{ .CollectionsData.ActiveCollection.ID }}"
+      hx-trigger="every 2s"
+      hx-swap="innerHTML"
     >
       {{ template "home/drawing-list" .DrawingListData }}
     </div>
