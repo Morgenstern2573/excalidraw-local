@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -21,7 +22,10 @@ func (a *Application) Index(c echo.Context) error {
 
 	var userID string
 	userID, ok := sess.Values["userID"].(string)
+
 	if !ok {
+		err = errors.New("error with userID")
+		a.Server.Logger.Error(err)
 		return c.Redirect(http.StatusMovedPermanently, "/login")
 	}
 
@@ -126,7 +130,7 @@ func (a *Application) Index(c echo.Context) error {
 		return err
 	}
 
-	presenceMap, err := makePresenceMap(drawingList, a.Presence.Users)
+	presenceMap, err := makePresenceMap(drawingList, a.Presence.Users, userID)
 	if err != nil {
 		a.Server.Logger.Error(err)
 		return err

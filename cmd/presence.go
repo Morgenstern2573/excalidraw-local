@@ -2,10 +2,12 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"sync"
 	"time"
 
 	"github.com/actanonv/excalidraw-local/services"
+	"github.com/actanonv/excalidraw-local/ui"
 )
 
 func newPresence() *Presence {
@@ -61,14 +63,20 @@ func (p *Presence) UserAtDrawing(userID, drawingID string) error {
 	return nil
 }
 
-func makePresenceMap(drawingList []services.Drawing, users map[string]*PresenceDetails) (map[string][]string, error) {
-	presenceMap := make(map[string][]string)
+func makePresenceMap(drawingList []services.Drawing, users map[string]*PresenceDetails, currentUser string) (map[string][]ui.PresentUser, error) {
+	presenceMap := make(map[string][]ui.PresentUser)
 
 	for _, details := range users {
 		for _, drawing := range drawingList {
 			if details.LastDrawing == drawing.ID {
+				if details.UserID == currentUser {
+					continue
+				}
+
 				user, err := services.Users().GetUserByID(details.UserID)
-				displayName := string(user.FirstName[0]) + string(user.LastName[0])
+				initials := string(user.FirstName[0]) + string(user.LastName[0])
+				name := fmt.Sprintf("%s %s", user.FirstName, user.LastName)
+				userDetails := ui.PresentUser{Initials: initials, Name: name}
 
 				if err != nil {
 					return nil, err
@@ -76,9 +84,9 @@ func makePresenceMap(drawingList []services.Drawing, users map[string]*PresenceD
 
 				_, found := presenceMap[details.LastDrawing]
 				if found {
-					presenceMap[details.LastDrawing] = append(presenceMap[details.LastDrawing], displayName)
+					presenceMap[details.LastDrawing] = append(presenceMap[details.LastDrawing], userDetails)
 				} else {
-					presenceMap[details.LastDrawing] = []string{displayName}
+					presenceMap[details.LastDrawing] = []ui.PresentUser{userDetails}
 				}
 
 				break

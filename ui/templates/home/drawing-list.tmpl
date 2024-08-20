@@ -15,8 +15,11 @@
 
     {{ if (index $.PresenceMap .ID) }}
       {{ range (index $.PresenceMap .ID) }}
-          <div class="rounded-full w-4 h-4 border border-black">
-            {{ . }}
+          <div 
+            class="rounded-full w-4 h-4 border border-black"
+            title="{{ .Name }}"
+          >
+            {{ .Initials }}
           </div>
       {{end}}
     {{ end }}

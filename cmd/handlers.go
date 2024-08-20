@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -119,6 +120,20 @@ func (a *Application) CreateCollection(c echo.Context) error {
 }
 
 func (a *Application) UpdatePresenceIndicators(c echo.Context) error {
+	sess, err := session.Get("session", c)
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	var userID string
+	userID, ok := sess.Values["userID"].(string)
+	if !ok {
+		err = errors.New("error with userID")
+		a.Server.Logger.Error(err)
+		return err
+	}
+
 	collectionID := c.QueryParam("collection-id")
 	if collectionID == "" {
 		return c.String(http.StatusBadRequest, "collection id not found")
@@ -130,7 +145,7 @@ func (a *Application) UpdatePresenceIndicators(c echo.Context) error {
 		return err
 	}
 
-	presenceMap, err := makePresenceMap(drawingList, a.Presence.Users)
+	presenceMap, err := makePresenceMap(drawingList, a.Presence.Users, userID)
 	if err != nil {
 		a.Server.Logger.Error(err)
 		return err

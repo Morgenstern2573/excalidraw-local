@@ -7,9 +7,14 @@ type IndexCollections struct {
 	ActiveCollection services.Collection
 }
 
+type PresentUser struct {
+	Initials string
+	Name     string
+}
+
 type DrawingListData struct {
 	DrawingList []services.Drawing
-	PresenceMap map[string][]string
+	PresenceMap map[string][]PresentUser
 }
 
 type IndexPageData struct {
