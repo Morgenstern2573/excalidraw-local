@@ -12,7 +12,8 @@ type AppServices struct {
 
 type UserSvc interface {
 	CreateUser(firstName, lastName, email, passwordHash string) (User, error)
-	GetUser(email string) (User, error)
+	GetUserByEmail(email string) (User, error)
+	GetUserByID(email string) (User, error)
 	DeleteUser(email string) error
 	UpdateUser(column, data string) error
 }

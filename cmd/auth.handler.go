@@ -87,7 +87,7 @@ func (a *Application) LoginUser(c echo.Context) error {
 		return c.String(http.StatusBadRequest, "required param not found")
 	}
 
-	user, err := services.Users().GetUser(formData.Email)
+	user, err := services.Users().GetUserByEmail(formData.Email)
 
 	pageData := ui.AuthPageData{}
 
