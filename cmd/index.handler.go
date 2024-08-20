@@ -126,5 +126,13 @@ func (a *Application) Index(c echo.Context) error {
 		return err
 	}
 
+	presenceMap, err := makePresenceMap(drawingList, a.Presence.Users)
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	pageData.DrawingListData.PresenceMap = presenceMap
+
 	return c.Render(http.StatusOK, "home", pageData)
 }

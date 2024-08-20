@@ -130,21 +130,10 @@ func (a *Application) UpdatePresenceIndicators(c echo.Context) error {
 		return err
 	}
 
-	presenceMap := make(map[string][]string)
-
-	for _, details := range a.Presence.Users {
-		for _, drawing := range drawingList {
-			if details.LastDrawing == drawing.ID {
-				_, found := presenceMap[details.LastDrawing]
-				if found {
-					presenceMap[details.LastDrawing] = append(presenceMap[details.LastDrawing], details.UserID)
-				} else {
-					presenceMap[details.LastDrawing] = []string{details.UserID}
-				}
-
-				break
-			}
-		}
+	presenceMap, err := makePresenceMap(drawingList, a.Presence.Users)
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
 	}
 
 	return c.Render(http.StatusOK, "home/drawing-list", ui.DrawingListData{DrawingList: drawingList, PresenceMap: presenceMap})
