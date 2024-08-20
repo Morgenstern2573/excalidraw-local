@@ -18,8 +18,8 @@ CREATE TABLE Drawings(
 
 CREATE TABLE Users(
   ID TEXT PRIMARY KEY,
-  FirstName TEXT,
-  LastName TEXT,
+  FirstName  TEXT NOT NULL,
+  LastName  TEXT NOT NULL,
   Email TEXT UNIQUE,
   PasswordHash TEXT NOT NULL
 );
