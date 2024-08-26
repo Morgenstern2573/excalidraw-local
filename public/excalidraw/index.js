@@ -1,4 +1,5 @@
 function initExcalidraw() {
+  debugger;
   const Excalidraw = window.ExcalidrawLib.Excalidraw;
   const MainMenu = window.ExcalidrawLib.MainMenu;
   const CustomMenuItem = MainMenu.ItemCustom;
@@ -61,6 +62,8 @@ function initExcalidraw() {
     let localData = localStorage.getItem(DRAWING_ID);
     if (!localData || localData === "") {
       localData = {};
+    } else {
+      localData = JSON.parse(localData);
     }
 
     if (serverData === "") {
@@ -83,6 +86,18 @@ function initExcalidraw() {
   }
 
   const saveDrawingData = debounce(async function (api) {
+    const collaborators = new Map();
+    collaborators.set("test0", {
+      username: "test0",
+      pointer: {
+        x: 500,
+        y: 500,
+        tool: "pointer",
+      },
+    });
+    api.updateScene({
+      collaborators: collaborators,
+    });
     const elems = api.getSceneElements();
     const state = api.getAppState();
     let drawingData = ExcalidrawLib.serializeAsJSON(elems, state);
@@ -95,9 +110,7 @@ function initExcalidraw() {
 
         savedData = JSON.stringify(savedData);
         let formattedDrawingData = drawingData.replace(/\s/g, "");
-        console.log(savedData, formattedDrawingData);
         if (savedData === formattedDrawingData) {
-          console.log("early return");
           return;
         }
       }
@@ -139,7 +152,6 @@ function initExcalidraw() {
               elements: INITIAL_DRAWING_DATA["elements"],
               appState: INITIAL_DRAWING_DATA["appState"],
             }}
-            autoFocus={true}
           >
             {/* TODO: Remove excalidraw socials from main menu, leave the rest */}
             {/* <MainMenu>
