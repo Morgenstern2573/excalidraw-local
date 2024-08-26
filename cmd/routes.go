@@ -40,7 +40,7 @@ func (a *Application) SetupRouting() {
 	appRoutes := a.Server.Group("/app", routeProtector)
 	appRoutes.GET("", a.Index)
 	appRoutes.POST("/new-drawing", a.CreateDrawing)
-	appRoutes.POST("update-drawing-data", a.UpdateDrawingData)
+	appRoutes.POST("/update-drawing-data", a.UpdateDrawingData)
 	appRoutes.POST("/create-collection", a.CreateCollection)
 	appRoutes.GET("/presence-update", a.UpdatePresenceIndicators)
 	appRoutes.DELETE("", a.DeleteDrawing)
