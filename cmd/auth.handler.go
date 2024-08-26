@@ -55,6 +55,17 @@ func (a *Application) RegisterUser(c echo.Context) error {
 		a.Server.Logger.Error(err)
 		return err
 	}
+	sess, err := session.Get("session", c)
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	sess.Values["userID"] = user.ID
+	if err := sess.Save(c.Request(), c.Response()); err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
 
 	d := PresenceDetails{
 		UserID:     user.Email,
