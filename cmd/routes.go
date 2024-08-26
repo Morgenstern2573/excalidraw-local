@@ -43,6 +43,8 @@ func (a *Application) SetupRouting() {
 	appRoutes.POST("/update-drawing-data", a.UpdateDrawingData)
 	appRoutes.POST("/create-collection", a.CreateCollection)
 	appRoutes.GET("/presence-update", a.UpdatePresenceIndicators)
+	appRoutes.POST("/update-user-position", a.UpdateUserPosition)
+	appRoutes.GET("/get-users-at-drawing", a.GetUsersAtDrawing)
 	appRoutes.DELETE("", a.DeleteDrawing)
 	//TODO: replace with fig config
 	a.Server.Static("/public", "./public")

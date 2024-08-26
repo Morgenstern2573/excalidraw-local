@@ -1,5 +1,4 @@
 function initExcalidraw() {
-  debugger;
   const Excalidraw = window.ExcalidrawLib.Excalidraw;
   const MainMenu = window.ExcalidrawLib.MainMenu;
   const CustomMenuItem = MainMenu.ItemCustom;
@@ -86,18 +85,6 @@ function initExcalidraw() {
   }
 
   const saveDrawingData = debounce(async function (api) {
-    const collaborators = new Map();
-    collaborators.set("test0", {
-      username: "test0",
-      pointer: {
-        x: 500,
-        y: 500,
-        tool: "pointer",
-      },
-    });
-    api.updateScene({
-      collaborators: collaborators,
-    });
     const elems = api.getSceneElements();
     const state = api.getAppState();
     let drawingData = ExcalidrawLib.serializeAsJSON(elems, state);
@@ -138,8 +125,82 @@ function initExcalidraw() {
     navigator.sendBeacon("/app/update-drawing-data", form);
   }, 1000);
 
+  const updateUserPosition = debounce(async function (x, y) {
+    let data = new FormData();
+    data.set("drawingID", DRAWING_ID);
+    data.set("xPos", x);
+    data.set("yPos", y);
+
+    try {
+      fetch("/app/update-user-position", {
+        method: "POST",
+        body: data,
+      });
+    } catch (err) {
+      console.log("Unable to update user position");
+      console.error(err);
+    }
+  }, 1000);
+
   const App = () => {
     const [excalidrawAPI, setExcalidrawAPI] = React.useState(null);
+    const excalidrawAPIRef = React.useRef(null);
+
+    React.useEffect(() => {
+      excalidrawAPIRef.current = excalidrawAPI;
+    }, [excalidrawAPI]);
+
+    React.useEffect(() => {
+      let intervalId;
+
+      const cleanup = () => {
+        clearInterval(intervalId);
+      };
+
+      intervalId = setInterval(() => {
+        if (!excalidrawAPIRef.current) {
+          return;
+        }
+
+        try {
+          fetch(`/app/get-users-at-drawing?drawingID=${DRAWING_ID}`)
+            .then((response) => response.json())
+            .then((resp) => {
+              let users = JSON.parse(resp);
+
+              if (users.length === 0) {
+                return;
+              }
+
+              const collaborators = new Map();
+              for (let user of users) {
+                collaborators.set(user.userID, {
+                  username: user.username,
+                  pointer: {
+                    x: parseFloat(user.xPos),
+                    y: parseFloat(user.yPos),
+                    tool: "pointer",
+                  },
+                });
+              }
+
+              if (collaborators.size === 0) {
+                return;
+              }
+
+              excalidrawAPIRef.current.updateScene({
+                collaborators: collaborators,
+              });
+            });
+        } catch (err) {
+          console.log("error getting user positions");
+          console.error(err);
+        }
+      }, 1000);
+
+      return cleanup;
+    }, []);
+
     return (
       <>
         <div style={{ height: "95vh" }}>
@@ -147,6 +208,9 @@ function initExcalidraw() {
             excalidrawAPI={(api) => setExcalidrawAPI(api)}
             onChange={() => {
               saveDrawingData(excalidrawAPI);
+            }}
+            onPointerUpdate={(data) => {
+              updateUserPosition(data.pointer.x, data.pointer.y);
             }}
             initialData={{
               elements: INITIAL_DRAWING_DATA["elements"],

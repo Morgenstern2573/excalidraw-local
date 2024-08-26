@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"log"
+	"time"
 
 	"github.com/actanonv/excalidraw-local/services"
 	"github.com/gorilla/sessions"
@@ -25,6 +26,18 @@ func main() {
 	services.Init(db)
 
 	app := &Application{Server: echo.New(), Presence: newPresence()}
+	go func() {
+		for {
+			for user, details := range app.Presence.Users {
+				if time.Since(details.lastUpdate) > time.Hour {
+					app.Presence.RemoveUser(user)
+				}
+			}
+
+			time.Sleep(5 * time.Minute)
+		}
+	}()
+
 	app.Server.HideBanner = true
 	// replace with env variable
 	app.Server.Use(session.Middleware(sessions.NewCookieStore([]byte("internal_secret_super_secret"))))

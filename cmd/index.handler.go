@@ -29,6 +29,12 @@ func (a *Application) Index(c echo.Context) error {
 		return c.Redirect(http.StatusMovedPermanently, "/login")
 	}
 
+	user, err := services.Users().GetUserByID(userID)
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
 	drawingID := c.QueryParam("drawing")
 	selectedCollection := c.QueryParam("select-collection")
 
@@ -114,7 +120,7 @@ func (a *Application) Index(c echo.Context) error {
 	} else {
 		d := PresenceDetails{
 			UserID:     userID,
-			Name:       "rando",
+			Name:       fmt.Sprintf("%s %s", user.FirstName, user.LastName),
 			login:      time.Now(),
 			lastUpdate: time.Now(),
 		}

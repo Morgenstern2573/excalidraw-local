@@ -1,6 +1,6 @@
 {{/* extends "base" */}}
 
-{{/* Context is of type ui.IndexPageData */}}
+{{/* Context has type ui.IndexPageData */}}
 
 {{ block "head-scripts" .}}
   <script src="https://unpkg.com/react@18.2.0/umd/react.development.js"></script>
@@ -37,8 +37,7 @@
     {{ end }}
   </main>
 
-  <div id="modal-area" class="-z-10">
-  </div>
+  <div id="modal-area" class="-z-10"></div>
 
   <script type="module" src="public/stimulus/index.js"></script>
   <script type="text/babel" src="public/excalidraw/index.js"></script>
@@ -134,7 +133,7 @@
       id="drawing-list" 
       class="flex flex-col gap-small"
       hx-get="/app/presence-update?collection-id={{ .CollectionsData.ActiveCollection.ID }}"
-      hx-trigger="every 2s"
+      hx-trigger="every 5s"
       hx-swap="innerHTML"
     >
       {{ template "home/drawing-list" .DrawingListData }}

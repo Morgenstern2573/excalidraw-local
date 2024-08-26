@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -171,4 +172,90 @@ func (a *Application) DeleteDrawing(c echo.Context) error {
 	c.Response().Header().Add("HX-Trigger", fmt.Sprintf(`{"deleteDrawing":%q}`, drawingID))
 
 	return nil
+}
+
+func (a *Application) UpdateUserPosition(c echo.Context) error {
+	sess, err := session.Get("session", c)
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	var userID string
+	userID, ok := sess.Values["userID"].(string)
+	if !ok {
+		return c.Redirect(http.StatusMovedPermanently, "/login")
+	}
+
+	type FormData struct {
+		DrawingID string `form:"drawingID"`
+		XPos      string `form:"xPos"`
+		YPos      string `form:"yPos"`
+	}
+
+	var formData FormData
+
+	err = c.Bind(&formData)
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	err = a.Presence.UpdateUserPosition(userID, formData.DrawingID, PresencePosition{X: formData.XPos, Y: formData.YPos})
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	return nil
+}
+
+func (a *Application) GetUsersAtDrawing(c echo.Context) error {
+	sess, err := session.Get("session", c)
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	var userID string
+	userID, ok := sess.Values["userID"].(string)
+	if !ok {
+		return c.Redirect(http.StatusMovedPermanently, "/login")
+	}
+
+	drawingID := c.QueryParam("drawingID")
+	if drawingID == "" {
+		return c.String(http.StatusBadRequest, "no drawing ID")
+	}
+
+	users, err := a.Presence.GetUsersAtDrawing(drawingID)
+
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	type UserLocation struct {
+		Username string `json:"username"`
+		UserID   string `json:"userID"`
+		XPos     string `json:"xPos"`
+		YPos     string `json:"yPos"`
+	}
+
+	locationData := make([]UserLocation, 0)
+
+	for _, user := range users {
+		if user.UserID == userID {
+			continue
+		}
+		locationData = append(locationData, UserLocation{Username: user.Name, UserID: user.UserID, XPos: user.Position.X, YPos: user.Position.Y})
+	}
+
+	retv, err := json.Marshal(locationData)
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	return c.JSON(http.StatusOK, string(retv))
 }
