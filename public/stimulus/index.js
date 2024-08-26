@@ -8,7 +8,6 @@ class ToggleVisibility extends Controller {
   static targets = ["content"];
 
   connect() {
-    console.log(this);
     this.contentTarget.addEventListener("htmx:beforeOnLoad", () => {
       this.hideContent();
     });
