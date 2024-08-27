@@ -9,7 +9,6 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -44,7 +43,6 @@ func main() {
 
 	app.SetupRenderer()
 	app.SetupRouting()
-	app.Server.Use(middleware.Logger())
 
 	app.Server.Logger.Fatal(app.Server.Start(":4000"))
 }

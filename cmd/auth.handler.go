@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -68,8 +69,8 @@ func (a *Application) RegisterUser(c echo.Context) error {
 	}
 
 	d := PresenceDetails{
-		UserID:     user.Email,
-		Name:       user.Email,
+		UserID:     user.ID,
+		Name:       fmt.Sprintf("%s %s", user.FirstName, user.LastName),
 		login:      time.Now(),
 		lastUpdate: time.Now(),
 	}
@@ -125,8 +126,9 @@ func (a *Application) LoginUser(c echo.Context) error {
 	}
 
 	d := PresenceDetails{
-		UserID:     user.ID,
-		Name:       user.Email,
+		UserID: user.ID,
+		Name:   fmt.Sprintf("%s %s", user.FirstName, user.LastName),
+
 		login:      time.Now(),
 		lastUpdate: time.Now(),
 	}
