@@ -20,13 +20,12 @@ module.exports = {
       },
 
       fontSize: {
-        xxxs: "0.5rem",
-        xxs: "0.625rem",
         vSmall: "calc(0.5 * var(--fontSize-base))",
         small: "calc(0.75 * var(--fontSize-base))",
         base: "var(--fontSize-base)",
-        large: "calc(1.5 * var(--fontSize-base))",
-        vLarge: "calc(2 * var(--fontSize-base))",
+        large: "calc(1.25 * var(--fontSize-base))",
+        vLarge: "calc(1.5 * var(--fontSize-base))",
+        huge: "calc(2.25 * var(--space-base))",
       },
     },
   },

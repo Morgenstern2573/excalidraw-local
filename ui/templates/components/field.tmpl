@@ -1,0 +1,50 @@
+{{- /* This component accepts the following params:
+	- id:string
+	- type:string
+	- name:string
+	- value:string
+	- class:string
+	- labelClass:string
+	- placeholder:string
+	- opts:[]struct => only used when type == select
+
+	Valid values for the type param: ('select', 'textarea', 'standard input types')
+ */ -}}
+
+{{- if eq ._isEnd false -}}
+
+	{{- $id := (ifZero .id .name) -}}
+	{{- $inpClass := (ifZero .inpClass " ") -}}
+	{{- $labelClass := (ifZero .labelClass " ") -}}
+	{{- $containerClass := (ifZero .containerClass " ") -}}
+	{{- $type := (ifZero .type "text") -}}
+	{{- $attr := attributeSet -}}
+	{{- $placeholder := (ifZero .placeholder " ") -}}
+	{{- $appearance := (print $inpClass " block w-full ") -}}
+
+	<div class="{{ $containerClass }}">
+		{{ if .label }}
+			<label for="{{ .id }}" class="block {{ (mergeTwClasses $labelClass "mb-tiny " " ") }}">
+				{{ .label }}
+			</label>
+		{{ end }}
+
+		{{ template "textinput.tmpl" 
+			(map "_isSelfClosing" true "name" .name "type" $type  "id" $id 
+			"value" .value "class" $appearance "disabled" .disabled "placeholder" $placeholder
+			"required" .required
+		 	) }}
+
+		{{ if .help }}
+			<p id="helper-text-{{ .id }}" class="mt-2 text-sm text-content-light">
+				{{ .help }}
+			</p>
+		{{ end }}
+
+		{{ if .error }}
+			<p id="err-text-{{ .id }}" class="mt-2 text-sm text-error-dark">
+				{{ .error }}
+			</p>
+		{{ end }}
+	</div>
+{{- end -}}

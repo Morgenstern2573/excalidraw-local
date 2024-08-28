@@ -8,12 +8,41 @@
   <link rel="stylesheet" href="/public/css/styles.css">
 </head>
 
-<body
-  class=""
->
+<body>
+  <main class="grid grid-cols-1 lg:grid-cols-2 h-screen relative">
+    <div
+      id="form-panel" 
+      class="px-6 lg:px-14 flex flex-col bg-white"
+    >
+      <header
+        class="bg-blue-500/50 lg:bg-transparent absolute h-56
+          lg:static lg:h-auto flex flex-col flex-center
+          rounded-b-[1.875rem] inset-x-0 top-0"
+      >
+        <h1 
+          class="mt-base font-semibold text-huge 
+          text-white lg:text-black capitalize"
+        >
+            {{ block "headerText" . }} Welcome! {{end}}
+        </h1>
+        
+        <h2 class="text-large text-white lg:text-black/75 text-center"> 
+          {{ block "subHeaderText" . }} Sub header text {{end}} 
+        </h2>
+      </header>
 
-{{ block "content" . }}
-{{ end }}
+      {{ block "content" . }}
+      
+      {{ end }}
+    </div>
 
+    <div
+      id="bg-panel" 
+      class="hidden bg-blue-500/50 lg:flex flex-col gap-small items-center justify-center 
+      text-white h-full"
+    >
+      <p class="font-semibold text-huge">LOGO</p>
+    </div>
+  </main>
 </body>
 </html>

@@ -1,0 +1,41 @@
+{{- /* This component accepts the following params:
+	- id:string
+	- type:string
+	- name:string
+	- value:string
+	- class:string
+	- placeholder:string
+ */ -}}
+
+{{- if ._isSelfClosing -}}
+	{{- $class := (ifZero .class "") -}}
+	{{- $id := (ifZero .id .name) -}}
+	{{- $type := (ifZero .type "text") -}}
+	{{- $attr := attributeSet -}}
+	{{- $placeholder := (ifZero .placeholder "") -}}
+
+	{{ $appearance := ` border focus:ring-primary-500 p-small placeholder-text-light` }}
+
+	{{- if and (ne $type "checkbox") (ne $type "radio") -}}
+		{{ $appearance = (print $appearance " rounded-lg ") }}
+	{{- end -}}
+
+	{{- if .value -}}
+		{{ $attr.Set "value" .value }}
+	{{- end -}}
+	
+	{{- if .required -}}
+		{{ $attr.Set "required" "true" }}
+	{{- end -}}
+
+	{{- if eq .disabled "true" -}}
+		{{ $appearance = (print $appearance "bg-gray-100") }}
+		{{ $attr.Set "disabled" "true" }}
+	{{- end -}}
+
+	{{- $appearance = (mergeTwClasses $class $appearance " ") -}}
+
+	<input type="{{ $type }}" id="{{ $id }}" name="{{ .name }}" 
+					placeholder="{{ $placeholder }}"
+					class="{{ $appearance }}" autocomplete="off" {{ $attr.Render }}>
+{{- end -}}

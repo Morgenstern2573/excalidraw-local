@@ -2,62 +2,74 @@
 
 {{/* Context should be of type ui.AuthPageData */}}
 
+{{ block "headerText" .}}
+  Register
+{{ end }}
+
+{{ block "subHeaderText" .}}
+  Fill in your details to get started
+{{ end }}
+
 {{ block "content" . }}
-  <h1 
-    class="text-large my-large text-center"
-  >
-    Signup
-  </h1>
+  <div class="mt-vLarge">
+    {{ if .Error }}
+      <p
+        class="bg-red-50 rounded-md py-large my-base text-red-900 text-center"
+      >
+        {{ .Error }}
+      </p>
+    {{ end }}
 
-  {{ if .Error }}
-    <p class="text-red-900">
-      {{ .Error }}
-    </p>
-  {{ end }}
-
-  <form 
-    action="/register"
-    method="POST"
-    class="flex flex-col gap-base w-fit mx-auto"
-  >
-    <input 
-      type="text" 
-      name="first-name"
-      placeholder="First Name..." 
-      required
+    <form
+      action="/register"
+      method="POST"
+      class="w-full flex flex-col gap-base mx-auto"
     >
+      <Field
+        type="text"
+        name="first-name"
+        label="First Name"
+        placeholder="Enter your first name"
+        required="true"
+      />
 
+      <Field
+        type="text"
+        name="last-name"
+        label="Last Name"
+        placeholder="Enter your last name"
+        required="true"
+      />
 
-    <input 
-      type="text" 
-      name="last-name"
-      placeholder="Last Name..." 
-      required
-    >
+      <Field
+        type="email"
+        name="email"
+        label="Email"
+        placeholder="Enter your email"
+        required="true"
+      />
 
-    <input 
-      type="email" 
-      name="email"
-      placeholder="Enter email..." 
-      required
-    >
+      <Field
+        type="password"
+        name="password"
+        label="Password"
+        placeholder="Enter a password"
+        required="true"
+      />
 
-    <input 
-      type="password" 
-      name="password"
-      placeholder="Enter password..." 
-      required
-    >
+      <Field
+        type="password"
+        name="confirm-password"
+        label="Confirm password"
+        placeholder="Confirm your password"
+        required="true"
+      />
 
-    <input 
-      type="password" 
-      name="confirm-password"
-      placeholder="Enter password again..." 
-      required
-    >
-
-    <button>
-      Submit
-    </button>
-  </form>
+      <button 
+        class="block mt-vLarge text-large py-small"
+      >
+        Submit
+      </button>
+    </form>
+  </div>
 {{ end }}

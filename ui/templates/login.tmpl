@@ -1,39 +1,48 @@
 {{/* extends "auth-base" */}}
 
+{{/* Context should be of type ui.AuthPageData */}}
+
+{{ block "headerText" .}}
+  Log In
+{{ end }}
+
+{{ block "subHeaderText" .}}
+  Welcome back, you've been missed!
+{{ end }}
+
 {{ block "content" . }}
-  <h1 
-    class="text-large text-center my-large"
-  >
-    Login to App
-  </h1>
-
-  {{ if .Error }}
-    <p class="text-red-900">
-      {{ .Error }}
-    </p>
-  {{ end }}
-
-  <form 
-    action="/login"
-    method="POST"
-    class="flex flex-col gap-base w-fit mx-auto"
-  >
-    <input 
-      type="email" 
-      name="email"
-      placeholder="Enter email..." 
-      required
+  <div class="mt-huge">
+    {{ if .Error }}
+      <p
+        class="bg-red-50 rounded-md py-large my-base text-red-900 text-center"
+      >
+        {{ .Error }}
+      </p>
+    {{ end }}
+    <form
+      action="/login"
+      method="POST"
+      class="w-full flex flex-col gap-base mx-auto"
     >
-
-    <input 
-      type="password" 
-      name="password"
-      placeholder="Enter password..." 
-      required
-    >
-
-    <button>
-      Submit
-    </button>
-  </form>
+      <Field
+        type="email"
+        name="email"
+        label="Email"
+        placeholder="Enter your email"
+        required="true"
+      />
+      <Field
+        type="password"
+        name="password"
+        label="Password"
+        placeholder="Enter a password"
+        required="true"
+      />
+      <button
+        class="block mt-vLarge text-large py-small"
+      >
+        Submit
+      </button>
+    </form>
+  </div>
 {{ end }}
