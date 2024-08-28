@@ -79,26 +79,31 @@ function initExcalidraw() {
       .getElementById("initial-drawing-data")
       .innerHTML.trim();
 
-    let localData = localStorage.getItem(DRAWING_ID);
-    if (!localData || localData === "") {
-      localData = {};
-    } else {
-      localData = JSON.parse(localData);
+    if (serverData && serverData !== "") {
+      serverData = JSON.parse(serverData);
+      INITIAL_DRAWING_DATA = serverData;
     }
 
-    if (serverData === "") {
-      INITIAL_DRAWING_DATA = localData;
-    } else {
-      serverData = JSON.parse(serverData);
-      if (
-        !localData["elements"] ||
-        serverData["timestamp"] > localData["timestamp"]
-      ) {
-        INITIAL_DRAWING_DATA = serverData;
-      } else {
-        INITIAL_DRAWING_DATA = localData;
-      }
-    }
+    // let localData = localStorage.getItem(DRAWING_ID);
+    // if (!localData || localData === "") {
+    //   localData = {};
+    // } else {
+    //   localData = JSON.parse(localData);
+    // }
+
+    // if (serverData === "") {
+    //   INITIAL_DRAWING_DATA = localData;
+    // } else {
+    //   serverData = JSON.parse(serverData);
+    //   if (
+    //     !localData["elements"] ||
+    //     serverData["timestamp"] > localData["timestamp"]
+    //   ) {
+    //     INITIAL_DRAWING_DATA = serverData;
+    //   } else {
+    //     INITIAL_DRAWING_DATA = localData;
+    //   }
+    // }
   } catch (err) {
     console.error("error reading initial data");
     console.error(err);
