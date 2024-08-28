@@ -1,7 +1,13 @@
+let root;
+
 function initExcalidraw() {
   const Excalidraw = window.ExcalidrawLib.Excalidraw;
   const MainMenu = window.ExcalidrawLib.MainMenu;
   const CustomMenuItem = MainMenu.ItemCustom;
+
+  if (root) {
+    root.unmount();
+  }
 
   const debounce = (fn, timeout) => {
     let handle = 0;
@@ -257,7 +263,7 @@ function initExcalidraw() {
   };
 
   const excalidrawWrapper = document.getElementById("app");
-  const root = ReactDOM.createRoot(excalidrawWrapper);
+  root = ReactDOM.createRoot(excalidrawWrapper);
   root.render(React.createElement(App));
 }
 
