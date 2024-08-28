@@ -620,6 +620,11 @@ input::placeholder {
   margin-right: auto;
 }
 
+.my-base {
+  margin-top: var(--space-base);
+  margin-bottom: var(--space-base);
+}
+
 .my-large {
   margin-top: calc(1.5 * var(--space-base));
   margin-bottom: calc(1.5 * var(--space-base));
@@ -637,20 +642,20 @@ input::placeholder {
   margin-left: auto;
 }
 
-.mr-tiny {
-  margin-right: calc(0.125 * var(--space-base));
+.mr-small {
+  margin-right: calc(0.5 * var(--space-base));
 }
 
 .mt-base {
   margin-top: var(--space-base);
 }
 
-.mr-small {
-  margin-right: calc(0.5 * var(--space-base));
-}
-
 .block {
   display: block;
+}
+
+.inline-block {
+  display: inline-block;
 }
 
 .flex {
@@ -679,10 +684,6 @@ input::placeholder {
 
 .h-screen {
   height: 100vh;
-}
-
-.w-10 {
-  width: 2.5rem;
 }
 
 .w-5 {
@@ -742,8 +743,16 @@ input::placeholder {
   gap: var(--space-base);
 }
 
+.gap-large {
+  gap: calc(1.5 * var(--space-base));
+}
+
 .gap-small {
   gap: calc(0.5 * var(--space-base));
+}
+
+.gap-vLarge {
+  gap: calc(2 * var(--space-base));
 }
 
 .overflow-auto {
@@ -769,6 +778,11 @@ input::placeholder {
 .border-black {
   --tw-border-opacity: 1;
   border-color: rgb(0 0 0 / var(--tw-border-opacity));
+}
+
+.border-gray-100 {
+  --tw-border-opacity: 1;
+  border-color: rgb(243 244 246 / var(--tw-border-opacity));
 }
 
 .bg-black {
@@ -807,9 +821,19 @@ input::placeholder {
   padding-right: var(--space-base);
 }
 
+.py-large {
+  padding-top: calc(1.5 * var(--space-base));
+  padding-bottom: calc(1.5 * var(--space-base));
+}
+
 .py-small {
   padding-top: calc(0.5 * var(--space-base));
   padding-bottom: calc(0.5 * var(--space-base));
+}
+
+.py-tiny {
+  padding-top: calc(0.125 * var(--space-base));
+  padding-bottom: calc(0.125 * var(--space-base));
 }
 
 .text-center {
@@ -832,6 +856,10 @@ input::placeholder {
   text-transform: capitalize;
 }
 
+.leading-none {
+  line-height: 1;
+}
+
 .text-red-900 {
   --tw-text-opacity: 1;
   color: rgb(127 29 29 / var(--tw-text-opacity));
@@ -839,6 +867,12 @@ input::placeholder {
 
 .underline {
   text-decoration-line: underline;
+}
+
+.transition-opacity {
+  transition-property: opacity;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
 }
 
 .flex-center {

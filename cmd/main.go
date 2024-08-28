@@ -15,6 +15,7 @@ import (
 type Application struct {
 	Server   *echo.Echo
 	Presence *Presence
+	Lock     *DrawingLock
 }
 
 func main() {
@@ -24,16 +25,17 @@ func main() {
 
 	services.Init(db)
 
-	app := &Application{Server: echo.New(), Presence: newPresence()}
+	app := &Application{Server: echo.New(), Presence: newPresence(), Lock: NewLock()}
 	go func() {
 		for {
-			for user, details := range app.Presence.Users {
-				if time.Since(details.lastUpdate) > time.Hour {
-					app.Presence.RemoveUser(user)
+			for userID, details := range app.Presence.Users {
+				if time.Since(details.lastUpdate) > (30 * time.Second) {
+					app.Presence.RemoveUser(userID)
+					app.Lock.RemoveUser(userID)
 				}
 			}
 
-			time.Sleep(5 * time.Minute)
+			time.Sleep(30 * time.Second)
 		}
 	}()
 

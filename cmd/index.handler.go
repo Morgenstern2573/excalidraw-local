@@ -103,6 +103,7 @@ func (a *Application) Index(c echo.Context) error {
 			ActiveCollection: activeCollection,
 			CollectionsList:  appCollections,
 		},
+		Editing: false,
 	}
 
 	if htmx.IsHxRequest(c.Request()) {
@@ -143,6 +144,21 @@ func (a *Application) Index(c echo.Context) error {
 	}
 
 	pageData.DrawingListData.PresenceMap = presenceMap
+
+	editRequest := c.QueryParam("edit")
+	if editRequest != "" {
+		ownerID, locked := a.Lock.IsDrawingLocked(drawingID)
+		if !locked {
+			pageData.Editing = true
+			a.Lock.LockDrawing(userID, drawingID)
+		} else if ownerID != userID {
+			pageData.Editing = false
+			pageData.Toast = "Sorry, someone else is editing this drawing."
+			c.Response().Header().Add("HX-Trigger-After-Settle", "showToast")
+		} else {
+			pageData.Editing = true
+		}
+	}
 
 	return c.Render(http.StatusOK, "home", pageData)
 }

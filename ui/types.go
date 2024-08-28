@@ -21,6 +21,8 @@ type IndexPageData struct {
 	ActiveDrawing   services.Drawing
 	CollectionsData IndexCollections
 	DrawingListData DrawingListData
+	Editing         bool
+	Toast           string
 }
 
 type AuthPageData struct {

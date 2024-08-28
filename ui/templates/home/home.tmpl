@@ -27,10 +27,28 @@
       <p class="hidden" id="drawing-id"> {{.ActiveDrawing.ID}} </p>
       <p class="hidden" id="initial-drawing-data"> {{.ActiveDrawing.Data}} </p>
       <p class="hidden" id="active-collection-id"> {{.ActiveDrawing.Collection}} </p>
+      <p class="hidden transition-opacity" id="is-editing"> {{.Editing}} </p>
 
+      <div class="flex justify-center items-center gap-vLarge">
+        <h2 class="text-large font-medium text-center">{{ .ActiveDrawing.Name }}</h2>
 
-      <h2 class="text-large font-medium text-center">{{ .ActiveDrawing.Name }}</h2>
-      <div id="app"></div>
+        {{ if not .Editing }}
+          <a 
+            href="/app?drawing={{.ActiveDrawing.ID}}&edit=true"
+            class="border border-black rounded px-base py-tiny leading-none
+              inline-block my-base
+            "
+          >
+              Edit
+          </a>
+        {{ end }}
+      </div>
+
+      <p id="toast" class="hidden bg-gray-50 rounded p-base py-large w-fit mx-auto my-base">
+        {{ .Toast }}
+      </p>
+
+      <div id="app" class="border border-gray-100 rounded"></div>
     
     {{ else }}
       <p>Select a drawing from the sidebar</p>
@@ -50,6 +68,7 @@
   >
   <div
     data-controller="toggleVisibility"
+    class="my-base"
   >
       <button 
         @click="showForm = true"
@@ -82,7 +101,7 @@
     
     <div
       data-controller="toggleVisibility"
-      class="mb-small"
+      class="my-base"
     >
       <div class="flex justify-between gap-base">
         {{ template "home/select-collection" .CollectionsData }}

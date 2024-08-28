@@ -34,6 +34,27 @@ function initExcalidraw() {
     return retv;
   };
 
+  let IS_EDITING = false;
+  try {
+    let e = document.getElementById("is-editing");
+    if (!e) {
+      return;
+    }
+
+    let val = e.innerHTML.trim();
+    if (!val || val == "") {
+      return;
+    }
+
+    if (val === "true") {
+      IS_EDITING = true;
+    }
+  } catch (err) {
+    console.log("error while reading DRAWING ID");
+    console.error(err);
+    return;
+  }
+
   let DRAWING_ID;
   try {
     let sc = document.getElementById("drawing-id");
@@ -122,7 +143,10 @@ function initExcalidraw() {
     form.append("drawing", DRAWING_ID);
     form.append("payload", JSONDrawingData);
 
-    navigator.sendBeacon("/app/update-drawing-data", form);
+    htmx.ajax("POST", "/app/update-drawing-data", {
+      values: form,
+      swap: "none",
+    });
   }, 1000);
 
   const updateUserPosition = debounce(async function (x, y) {
@@ -203,7 +227,7 @@ function initExcalidraw() {
 
     return (
       <>
-        <div style={{ height: "95vh" }}>
+        <div style={{ height: "90vh" }}>
           <Excalidraw
             excalidrawAPI={(api) => setExcalidrawAPI(api)}
             onChange={() => {
@@ -216,6 +240,7 @@ function initExcalidraw() {
               elements: INITIAL_DRAWING_DATA["elements"],
               appState: INITIAL_DRAWING_DATA["appState"],
             }}
+            viewModeEnabled={!IS_EDITING}
           >
             {/* TODO: Remove excalidraw socials from main menu, leave the rest */}
             {/* <MainMenu>

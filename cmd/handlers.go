@@ -70,6 +70,12 @@ func (a *Application) UpdateDrawingData(c echo.Context) error {
 		return err
 	}
 
+	ownerID, locked := a.Lock.IsDrawingLocked(drawingData.ID)
+	if !locked || (ownerID != userID) {
+		c.Response().Header().Add("HX-Refresh", fmt.Sprintf("/app?drawing=%s", drawingData.ID))
+		return c.String(http.StatusUnauthorized, "Someone else is editing this drawing")
+	}
+
 	err = services.Drawings().UpdateDrawingData(drawingData.ID, drawingData.Data)
 
 	if err != nil {

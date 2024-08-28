@@ -33,3 +33,21 @@ document
       window.location.href = url;
     }
   });
+
+// Function to show toast
+function showToast(message) {
+  const toastElement = document.getElementById("toast");
+  if (message && message.trim() !== "") {
+    toastElement.innerText = message;
+  }
+  toastElement.style.display = "block";
+
+  setTimeout(() => {
+    toastElement.style.opacity = "0";
+    toastElement.style.display = "none";
+  }, 5000);
+}
+
+document.querySelector("body").addEventListener("showToast", (event) => {
+  showToast();
+});
