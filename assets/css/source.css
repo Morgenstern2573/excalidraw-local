@@ -29,6 +29,10 @@ body {
   .modal-container {
     @apply bg-black bg-black/50 z-10 absolute top-0 w-screen h-screen;
   }
+
+  .htmx-indicator {
+    @apply w-5 h-5 block rounded-full border border-black border-t-white animate-spin;
+  }
 }
 
 @layer utilities {

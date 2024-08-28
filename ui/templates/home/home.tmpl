@@ -149,11 +149,14 @@
     </div>
 
     <div
-      id="drawing-list" 
-      class="flex flex-col gap-small"
       hx-get="/app/presence-update?collection-id={{ .CollectionsData.ActiveCollection.ID }}"
       hx-trigger="every 5s"
       hx-swap="innerHTML"
+      hx-target="#drawing-list"
+    ></div>
+    <div
+      id="drawing-list" 
+      class="flex flex-col gap-small"
     >
       {{ template "home/drawing-list" .DrawingListData }}
     </div>

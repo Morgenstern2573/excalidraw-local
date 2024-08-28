@@ -595,6 +595,27 @@ input::placeholder {
   background-color: rgb(0 0 0 / 0.5);
 }
 
+.htmx-indicator {
+  display: block;
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.htmx-indicator {
+  animation: spin 1s linear infinite;
+  border-radius: 9999px;
+  border-width: 1px;
+  border-color: rgb(0 0 0 / var(--tw-border-opacity));
+  --tw-border-opacity: 1;
+  border-top-color: rgb(255 255 255 / var(--tw-border-opacity));
+}
+
 .static {
   position: static;
 }
@@ -632,6 +653,10 @@ input::placeholder {
 
 .mb-base {
   margin-bottom: var(--space-base);
+}
+
+.ml-5 {
+  margin-left: 1.25rem;
 }
 
 .ml-auto {
@@ -777,6 +802,11 @@ input::placeholder {
 .border-gray-100 {
   --tw-border-opacity: 1;
   border-color: rgb(243 244 246 / var(--tw-border-opacity));
+}
+
+.border-t-white {
+  --tw-border-opacity: 1;
+  border-top-color: rgb(255 255 255 / var(--tw-border-opacity));
 }
 
 .bg-black {

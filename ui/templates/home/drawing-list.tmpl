@@ -12,10 +12,14 @@
     <a
       hx-get="/app?drawing={{.ID}}"
       hx-target="body"
-      class="underline cursor-pointer w-fit capitalize"
+      class="underline cursor-pointer w-fit capitalize flex gap-base"
+      hx-inidcator="closest span"
     >
       {{ .Name }}
+      
+      <span class="htmx-indicator ml-5"></span>
     </a>
+
 
 
     <button
