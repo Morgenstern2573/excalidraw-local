@@ -160,5 +160,11 @@ func (a *Application) Index(c echo.Context) error {
 		}
 	}
 
-	return c.Render(http.StatusOK, "home", pageData)
+	err = c.Render(http.StatusOK, "home", pageData)
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
+	return nil
 }

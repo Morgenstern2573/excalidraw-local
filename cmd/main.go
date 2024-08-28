@@ -29,13 +29,13 @@ func main() {
 	go func() {
 		for {
 			for userID, details := range app.Presence.Users {
-				if time.Since(details.lastUpdate) > (30 * time.Second) {
+				if time.Since(details.lastUpdate) > (30 * time.Minute) {
 					app.Presence.RemoveUser(userID)
 					app.Lock.RemoveUser(userID)
 				}
 			}
 
-			time.Sleep(30 * time.Second)
+			time.Sleep(30 * time.Minute)
 		}
 	}()
 

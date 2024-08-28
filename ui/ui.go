@@ -17,8 +17,10 @@ type TemplateRenderer struct {
 func NewTemplateRenderer() *TemplateRenderer {
 	//TODO: REPLACE with path fig config
 	tmpl, err := templates.New("./ui/templates", &templates.TemplateOptions{
-		Ext:       ".tmpl",
-		FuncMap:   template.FuncMap{},
+		Ext: ".tmpl",
+		FuncMap: template.FuncMap{"sub": func(a, b int) int {
+			return a - b
+		}},
 		PathToSVG: "./resources/svg",
 	})
 

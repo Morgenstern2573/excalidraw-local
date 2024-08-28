@@ -1,0 +1,35 @@
+{{/* data variable should have type []struct{Name:string, ID:string} */}}
+{{ $length := (len .data) }}
+{{ if and ._isSelfClosing (gt $length 0) }}
+ <div
+    class="flex justify-start mr-tiny"
+  >
+  
+    <div 
+      class="bg-white rounded-full w-5 h-5 flex flex-center 
+      text-vSmall border border-black"
+      title="{{ (index .data 0).Name }}"
+    >
+      {{ (index .data 0).Initials }}
+    </div>
+
+    {{ if gt $length 1 }}
+      <div 
+        class="bg-white rounded-full w-5 h-5 flex flex-center 
+        text-vSmall border border-black -translate-x-1/4"
+        title="{{ (index .data 1).Name }}"
+      >
+        {{ (index .data 1).Initials }}
+      </div>
+    {{ end }}
+
+    {{ if gt $length 2 }}
+        <div 
+          class="bg-white rounded-full w-5 h-5 flex flex-center 
+          text-vSmall border border-black -translate-x-1/2"
+        >
+          + {{ (sub $length 2 ) }}
+        </div>
+    {{end}}
+  </div>
+{{ end }}

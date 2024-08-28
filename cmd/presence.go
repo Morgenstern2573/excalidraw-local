@@ -50,6 +50,9 @@ func (p *Presence) AddUser(user *PresenceDetails) {
 }
 
 func (p *Presence) IsUserPresent(userID string) bool {
+	p.lock.Lock()
+	defer p.lock.Unlock()
+
 	_, found := p.Users[userID]
 	return found
 }
@@ -91,6 +94,9 @@ func (p *Presence) UpdateUserPosition(userID, drawingID string, position Presenc
 }
 
 func (p *Presence) GetUsersAtDrawing(drawingID string) ([]*PresenceDetails, error) {
+	p.lock.Lock()
+	defer p.lock.Unlock()
+
 	retv := make([]*PresenceDetails, 0)
 	users := p.Users
 
