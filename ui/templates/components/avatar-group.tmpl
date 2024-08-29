@@ -1,12 +1,16 @@
 {{/* data variable should have type []struct{Name:string, ID:string} */}}
+
 {{ $length := (len .data) }}
+{{ $class := (ifZero .class " ") }}
+{{ $defaultClass := "flex justify-start mr-tiny" }}
+
+
 {{ if and ._isSelfClosing (gt $length 0) }}
  <div
-    class="flex justify-start mr-tiny"
+    class="{{ (mergeTwClasses $class $defaultClass " ") }}"
   >
-  
     <div 
-      class="bg-white rounded-full w-5 h-5 flex flex-center 
+      class="bg-white rounded-full w-6 h-6 flex flex-center 
       text-vSmall border border-black"
       title="{{ (index .data 0).Name }}"
     >
@@ -15,7 +19,7 @@
 
     {{ if gt $length 1 }}
       <div 
-        class="bg-white rounded-full w-5 h-5 flex flex-center 
+        class="bg-white rounded-full w-6 h-6 flex flex-center 
         text-vSmall border border-black -translate-x-1/4"
         title="{{ (index .data 1).Name }}"
       >
@@ -25,7 +29,7 @@
 
     {{ if gt $length 2 }}
         <div 
-          class="bg-white rounded-full w-5 h-5 flex flex-center 
+          class="bg-white rounded-full w-6 h-6 flex flex-center 
           text-vSmall border border-black -translate-x-1/2"
         >
           + {{ (sub $length 2 ) }}
