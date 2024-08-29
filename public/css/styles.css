@@ -2297,6 +2297,11 @@ input::placeholder {
   padding-bottom: calc(0.125 * var(--space-base));
 }
 
+.py-base {
+  padding-top: var(--space-base);
+  padding-bottom: var(--space-base);
+}
+
 .text-center {
   text-align: center;
 }

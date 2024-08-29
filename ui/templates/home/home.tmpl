@@ -29,17 +29,16 @@
       <p class="hidden" id="active-collection-id"> {{.ActiveDrawing.Collection}} </p>
       <p class="hidden transition-opacity" id="is-editing"> {{.Editing}} </p>
 
-      <div class="flex justify-center items-center gap-vLarge">
+      <div class="py-small flex justify-center items-center gap-small">
         <h2 class="text-large font-medium text-center">{{ .ActiveDrawing.Name }}</h2>
 
         {{ if not .Editing }}
           <a 
             href="/app?drawing={{.ActiveDrawing.ID}}&edit=true"
-            class="border border-black rounded px-base py-tiny leading-none
-              inline-block my-base
-            "
+            class=""
+            title="Edit drawing {{ .ActiveDrawing.Name }}"
           >
-              Edit
+              <Svg name="pencil" class="w-4 h-4" />
           </a>
         {{ end }}
       </div>
