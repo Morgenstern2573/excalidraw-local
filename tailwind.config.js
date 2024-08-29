@@ -21,6 +21,7 @@ module.exports = {
           900: "#05131E",
           950: "#030B11",
         },
+
         secondary: {
           50: "#E8E8E8",
           100: "#CFCFCF",
@@ -36,8 +37,6 @@ module.exports = {
         },
       },
       spacing: {
-        4.5: "1.125rem",
-        15: "3.75rem",
         tiny: "calc(0.125 * var(--space-base))",
         vSmall: "calc(0.25 * var(--space-base))",
         small: "calc(0.5 * var(--space-base))",
