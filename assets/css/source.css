@@ -28,6 +28,10 @@ body {
     @apply py-small h-auto min-h-0;
   }
 
+  .btn-primary {
+    @apply text-white;
+  }
+
   input {
     @apply px-base py-small border border-black rounded-md placeholder:text-gray-600;
   }
