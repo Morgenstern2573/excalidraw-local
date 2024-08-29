@@ -24,7 +24,7 @@
 
 	<div class="{{ $containerClass }}">
 		{{ if .label }}
-			<label for="{{ .id }}" class="block {{ (mergeTwClasses $labelClass "mb-tiny " " ") }}">
+			<label for="{{ .id }}" class="block {{ (mergeTwClasses $labelClass "mb-tiny text-small text-secondary-400 font-medium" " ") }}">
 				{{ .label }}
 			</label>
 		{{ end }}
