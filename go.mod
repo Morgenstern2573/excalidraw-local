@@ -9,6 +9,7 @@ require (
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/mattn/go-sqlite3 v1.14.22
 	github.com/mayowa/templates v0.0.0-20240725120643-8d95d3a5d710
+	github.com/rs/xid v1.6.0
 )
 
 require (

@@ -2,10 +2,8 @@ package services
 
 import (
 	"database/sql"
-	"fmt"
-	"time"
 
-	"math/rand"
+	"github.com/rs/xid"
 )
 
 var serviceLayer AppServices
@@ -30,11 +28,9 @@ func Init(db *sql.DB) {
 }
 
 func generateID() string {
-	src := rand.NewSource(time.Now().UnixNano())
-	r := rand.New(src)
-	retv := 1000000000 + r.Int63n(9000000000)
+	guid := xid.New()
 
-	return fmt.Sprintf("%d", retv)
+	return guid.String()
 }
 
 func Drawings() DrawingSvc {
