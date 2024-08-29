@@ -203,10 +203,6 @@ function initExcalidraw() {
             .then((resp) => {
               let users = JSON.parse(resp);
 
-              if (users.length === 0) {
-                return;
-              }
-
               const collaborators = new Map();
               for (let user of users) {
                 collaborators.set(user.userID, {
@@ -217,10 +213,6 @@ function initExcalidraw() {
                     tool: "pointer",
                   },
                 });
-              }
-
-              if (collaborators.size === 0) {
-                return;
               }
 
               excalidrawAPIRef.current.updateScene({
