@@ -21,7 +21,7 @@ func NewTemplateRenderer() *TemplateRenderer {
 		FuncMap: template.FuncMap{"sub": func(a, b int) int {
 			return a - b
 		}},
-		PathToSVG: "./resources/svg",
+		PathToSVG: "./assets/svg",
 	})
 
 	if err != nil {

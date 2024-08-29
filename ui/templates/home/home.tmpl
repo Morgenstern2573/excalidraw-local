@@ -66,53 +66,67 @@
   <section 
     class="bg-gray-50 h-screen p-base"
   >
-  <div
-    data-controller="toggleVisibility"
-    class="my-base"
-  >
-      <button 
-        @click="showForm = true"
-        class="w-full"
-        data-action="toggleVisibility#showContent"
-      >
-        New collection
-      </button>
-
-      <form
-        class="mt-base flex flex-wrap gap-base"
-        hx-post="/app/create-collection"
-        hx-target="#select-collection"
-        hx-swap="outerHTML"
-
-        data-toggleVisibility-target="content"
-      >
-        <input
-          type="text"
-          name="collection-name"
-          id=""
-          class="w-full"
-          placeholder="Collection Name"
+    <div
+      data-controller="toggleVisibility"
+      class="my-large"
+    >
+        <button 
+          class="btn w-full"
+          data-action="toggleVisibility#showContent"
         >
-      
-        <button data-action="toggleVisibility#hideContent" >Save</button>
-        <button type="button" data-action="toggleVisibility#hideContent">Cancel</button>
-      </form>
-  </div>
+          Create collection
+        </button>
+
+        <form
+          class="mt-base flex flex-wrap gap-base"
+          hx-post="/app/create-collection"
+          hx-target="#select-collection"
+          hx-swap="outerHTML"
+
+          data-toggleVisibility-target="content"
+        >
+          <input
+            type="text"
+            name="collection-name"
+            id=""
+            class="w-full"
+            placeholder="Collection Name"
+          >
+        
+          <button 
+            data-action="toggleVisibility#hideContent"
+            class="btn btn-primary"
+          >
+            Save
+          </button>
+          
+          <button 
+            type="button"
+            class="btn" 
+            data-action="toggleVisibility#hideContent"
+          >
+            Cancel
+          </button>
+        </form>
+    </div>
+
+    <div class="flex flex-col mb-large">
+      <label class="text-secondary-300" for="">Current Collection</label>
+      {{ template "home/select-collection" .CollectionsData }}        
+    </div>
     
     <div
       data-controller="toggleVisibility"
-      class="my-base"
+      class="mb-large"
     >
-      <div class="flex justify-between gap-base">
-        {{ template "home/select-collection" .CollectionsData }}
-      
-        <button 
-          data-action="toggleVisibility#showContent"
-        >
-          +
-        </button>
-      </div>
-      
+      <button 
+        data-action="toggleVisibility#showContent"
+        title="Create drawing"
+        class="btn w-full"
+      >
+        Create drawing
+      </button>
+
       <form
         class="flex flex-wrap gap-base mt-base"
         hx-post="/app/new-drawing"
@@ -126,6 +140,7 @@
           name="collection-ID"
           value={{ .CollectionsData.ActiveCollection.ID }}
         >
+        
         <input
           type="text"
           class="w-full"
@@ -135,12 +150,14 @@
         >
         
         <button 
+          class="btn btn-primary"
         >
           Save
         </button>
 
         <button 
           type="button"
+          class="btn" 
           data-action="toggleVisibility#hideContent"
         >
           Cancel
@@ -156,7 +173,7 @@
     ></div>
     <div
       id="drawing-list" 
-      class="flex flex-col gap-small"
+      class="flex flex-col gap-base"
     >
       {{ template "home/drawing-list" .DrawingListData }}
     </div>

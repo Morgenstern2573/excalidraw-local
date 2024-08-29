@@ -17,9 +17,15 @@ body {
   }
 }
 
+@layer base {
+  html {
+    font-family: "Montserrat", system-ui, sans-serif;
+  }
+}
+
 @layer components {
-  button {
-    @apply border rounded-md px-base py-tiny;
+  .btn {
+    @apply py-small h-auto min-h-0;
   }
 
   input {
@@ -31,7 +37,7 @@ body {
   }
 
   .htmx-indicator {
-    @apply w-5 h-5 block rounded-full border border-black border-t-white animate-spin;
+    @apply loading loading-spinner;
   }
 }
 

@@ -1,0 +1,11 @@
+{{/*
+	This component accepts the following params:
+	- name:string:required => The name of the svg file in resources/svg
+	- class:string 
+*/}}
+
+
+{{- if and ._isSelfClosing .name -}}
+	{{ $class := (ifZero .class "" ) }}
+	{{ svg .name $class }}	
+{{- end -}}
