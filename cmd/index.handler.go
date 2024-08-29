@@ -160,6 +160,12 @@ func (a *Application) Index(c echo.Context) error {
 		}
 	}
 
+	err = services.AccessLogs().RecordAccess(userID, drawingID)
+	if err != nil {
+		a.Server.Logger.Error(err)
+		return err
+	}
+
 	err = c.Render(http.StatusOK, "home", pageData)
 	if err != nil {
 		a.Server.Logger.Error(err)
