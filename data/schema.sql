@@ -29,7 +29,7 @@ CREATE TABLE DrawingAccessLog(
   ID TEXT PRIMARY KEY,
   UserID TEXT NOT NULL,
   DrawingID TEXT NOT NULL,
-  AccessedAt INTEGER
+  AccessedAt INTEGER,
   FOREIGN KEY(UserID) REFERENCES Users(ID),
   FOREIGN KEY(DrawingID) REFERENCES Drawings(ID)
 );
