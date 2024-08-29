@@ -11,9 +11,10 @@ var serviceLayer AppServices
 func Init(db *sql.DB) {
 
 	serviceLayer = AppServices{
-		Users:       &AppUsers{DB: db},
-		Drawings:    &AppDrawings{DB: db},
-		Collections: &AppCollections{DB: db},
+		Users:             &AppUsers{DB: db},
+		Drawings:          &AppDrawings{DB: db},
+		Collections:       &AppCollections{DB: db},
+		DrawingAccessLogs: &AppDrawingAccessLogs{DB: db},
 	}
 
 	_, err := Collections().GetCollection("default")
@@ -43,4 +44,8 @@ func Collections() CollectionsSvc {
 
 func Users() UserSvc {
 	return serviceLayer.Users
+}
+
+func AccessLogs() DrawingAccessLogSvc {
+	return serviceLayer.DrawingAccessLogs
 }

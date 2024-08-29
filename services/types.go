@@ -2,12 +2,19 @@ package services
 
 import (
 	"database/sql"
+	"time"
 )
 
 type AppServices struct {
-	Drawings    DrawingSvc
-	Collections CollectionsSvc
-	Users       UserSvc
+	Drawings          DrawingSvc
+	Collections       CollectionsSvc
+	Users             UserSvc
+	DrawingAccessLogs DrawingAccessLogSvc
+}
+
+type DrawingAccessLogSvc interface {
+	RecordAccess(userID string, drawingID string) error
+	GetUserLogs(userID string, count int) ([]AccessLog, error)
 }
 
 type UserSvc interface {
@@ -43,6 +50,17 @@ type AppCollections struct {
 
 type AppUsers struct {
 	DB *sql.DB
+}
+
+type AppDrawingAccessLogs struct {
+	DB *sql.DB
+}
+
+type AccessLog struct {
+	ID         string
+	UserID     string
+	DrawingID  string
+	AccessedAt time.Time
 }
 
 type User struct {
