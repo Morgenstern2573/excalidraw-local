@@ -41,7 +41,15 @@ body {
   }
 
   .htmx-indicator {
-    @apply loading loading-spinner;
+    @apply hidden loading loading-spinner;
+  }
+
+  .htmx-request .htmx-indicator {
+    @apply block;
+  }
+
+  .htmx-request .htmx-hide {
+    display: none;
   }
 }
 

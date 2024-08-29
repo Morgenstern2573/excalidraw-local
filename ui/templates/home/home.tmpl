@@ -38,7 +38,9 @@
             class=""
             title="Edit drawing {{ .ActiveDrawing.Name }}"
           >
-              <Svg name="pencil" class="w-4 h-4" />
+              <Svg name="pencil" class="w-4 h-4 htmx-hide" />
+
+              <span class="htmx-indicator ml-5"></span>
           </a>
         {{ end }}
       </div>
@@ -97,6 +99,8 @@
             class="btn btn-primary"
           >
             Save
+
+            <span class="htmx-indicator ml-5"></span>
           </button>
           
           <button 
@@ -110,7 +114,7 @@
     </div>
 
     <div class="flex flex-col mb-large">
-      <label class="text-secondary-300" for="">Current Collection</label>
+      <label class="text-small text-secondary-400 font-medium" for="">Current Collection</label>
       {{ template "home/select-collection" .CollectionsData }}        
     </div>
     
@@ -152,6 +156,8 @@
           class="btn btn-primary"
         >
           Save
+
+          <span class="htmx-indicator ml-5"></span>
         </button>
 
         <button 
