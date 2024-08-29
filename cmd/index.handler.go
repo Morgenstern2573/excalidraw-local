@@ -150,6 +150,7 @@ func (a *Application) Index(c echo.Context) error {
 	if editRequest != "" {
 		ownerID, locked := a.Lock.IsDrawingLocked(drawingID)
 		if !locked {
+			a.Lock.RemoveUser(userID)
 			pageData.Editing = true
 			a.Lock.LockDrawing(userID, drawingID)
 		} else if ownerID != userID {
