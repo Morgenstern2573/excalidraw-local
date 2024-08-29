@@ -57,4 +57,14 @@ module.exports = {
     },
   },
   plugins: [require("daisyui")],
+  daisyui: {
+    themes: [
+      {
+        mytheme: {
+          primary: "#1b609d",
+          secondary: "#121212",
+        },
+      },
+    ],
+  },
 };
