@@ -15,52 +15,45 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 {{ end }}
 
-{{ block "body-class" . }}
-  h-screen grid md:grid-cols-[1fr_5fr] lg:grid-cols-[1fr_4fr]
-{{ end }}
-
 {{ block "content" . }}
-  {{ template "sidebar" . }}
-
-  <main class="h-screen">
-    {{ if .ActiveDrawing.ID }}
-      <p class="hidden" id="drawing-id"> {{.ActiveDrawing.ID}} </p>
-      <p class="hidden" id="initial-drawing-data"> {{.ActiveDrawing.Data}} </p>
-      <p class="hidden" id="active-collection-id"> {{.ActiveDrawing.Collection}} </p>
-      <p class="hidden transition-opacity" id="is-editing"> {{.Editing}} </p>
-
-      <div class="py-small flex justify-center items-center gap-small">
-        <h2 class="text-large font-medium text-center">{{ .ActiveDrawing.Name }}</h2>
-
-        {{ if not .Editing }}
-          <a 
-            href="/app?drawing={{.ActiveDrawing.ID}}&edit=true"
-            class=""
-            title="Edit drawing {{ .ActiveDrawing.Name }}"
-          >
-              <Svg name="pencil" class="w-4 h-4 htmx-hide" />
-
-              <span class="htmx-indicator"></span>
-          </a>
-        {{ end }}
-      </div>
-
-      <p id="toast" class="hidden bg-gray-50 rounded p-base py-large w-fit mx-auto my-base">
-        {{ .Toast }}
-      </p>
-
-      <div id="app" class="border border-gray-100 rounded"></div>
+  <section 
+    class="h-screen grid md:grid-cols-[1fr_4fr] xl:grid-cols-[1fr_3fr] 2xl:grid-cols-[1fr_4fr]"
+  >
+    {{ template "sidebar" . }}
+    <main class="h-screen">
+      {{ if .ActiveDrawing.ID }}
+        <p class="hidden" id="drawing-id"> {{.ActiveDrawing.ID}} </p>
+        <p class="hidden" id="initial-drawing-data"> {{.ActiveDrawing.Data}} </p>
+        <p class="hidden" id="active-collection-id"> {{.ActiveDrawing.Collection}} </p>
+        <p class="hidden transition-opacity" id="is-editing"> {{.Editing}} </p>
+        
+        <div class="py-small flex justify-center items-center gap-small">
+          <h2 class="text-large font-medium text-center">{{ .ActiveDrawing.Name }}</h2>
+          {{ if not .Editing }}
+            <a
+              href="/app?drawing={{.ActiveDrawing.ID}}&edit=true"
+              class=""
+              title="Edit drawing {{ .ActiveDrawing.Name }}"
+            >
+                <Svg name="pencil" class="w-4 h-4 htmx-hide" />
+                <span class="htmx-indicator"></span>
+            </a>
+          {{ end }}
+        </div>
+        <p id="toast" class="hidden bg-gray-50 rounded p-base py-large w-fit mx-auto my-base">
+          {{ .Toast }}
+        </p>
+        <div id="app" class="border border-gray-100 rounded"></div>
     
-    {{ else }}
-      <p>Select a drawing from the sidebar</p>
-    {{ end }}
-  </main>
-
-  <div id="modal-area" class="-z-10"></div>
-
-  <script type="module" src="public/stimulus/index.js"></script>
-  <script type="text/babel" src="public/excalidraw/index.js"></script>
-  <script type="text/babel" src="public/script.js"></script>
+      {{ else }}
+        <p>Select a drawing from the sidebar</p>
+      {{ end }}
+    </main>
+    <div id="modal-area" class="-z-10"></div>
+    <script type="module" src="public/stimulus/index.js"></script>
+    <script type="text/babel" src="public/excalidraw/index.js"></script>
+    <script type="text/babel" src="public/script.js"></script>
+  </section>
 {{ end }}
 
 {{ define "sidebar" }}
@@ -82,7 +75,10 @@
         </button>
 
         <form
-          class="mt-base flex flex-wrap gap-base"
+          class="
+            mt-base flex flex-col gap-small bg-white shadow-inset
+            rounded px-vLarge py-base
+          "
           hx-post="/app/create-collection"
           hx-target="#select-collection"
           hx-swap="outerHTML"
@@ -98,20 +94,22 @@
             placeholder="Collection Name"
           >
         
-          <button 
-            data-action="toggleVisibility#hideContent"
-            class="btn btn-primary"
-          >
-            Save
-          </button>
-          
-          <button 
-            type="button"
-            class="btn" 
-            data-action="toggleVisibility#hideContent"
-          >
-            Cancel
-          </button>
+          <div class="flex justify-center gap-base">
+            <button 
+              data-action="toggleVisibility#hideContent"
+              class="btn w-20 btn-primary"
+            >
+              Save
+            </button>
+            
+            <button 
+              type="button"
+              class="btn w-20" 
+              data-action="toggleVisibility#hideContent"
+            >
+              Cancel
+            </button>
+          </div>
         </form>
     </div>
 
@@ -136,7 +134,11 @@
       </button>
 
       <form
-        class="flex flex-wrap gap-base mt-base"
+        class="
+          mt-base flex flex-col gap-small bg-white shadow-inset
+          rounded px-vLarge py-base
+        "
+
         hx-post="/app/new-drawing"
         hx-target="#drawing-list"
         hx-indicator="#create-drawing-btn"
@@ -158,27 +160,27 @@
           required
         >
         
-        <button 
-          class="btn btn-primary"
-        >
-          Save
-
-          <span class="htmx-indicator ml-5"></span>
-        </button>
-
-        <button 
-          type="button"
-          class="btn" 
-          data-action="toggleVisibility#hideContent"
-        >
-          Cancel
-        </button>
+        <div class="flex justify-center gap-base">
+          <button
+            class="btn w-20 btn-primary"
+          >
+            Save
+            <span class="htmx-indicator ml-5"></span>
+          </button>
+          <button
+            type="button"
+            class="btn w-20"
+            data-action="toggleVisibility#hideContent"
+          >
+            Cancel
+          </button>
+        </div>
       </form>
     </div>
 
     <div
       hx-get="/app/presence-update?collection-id={{ .CollectionsData.ActiveCollection.ID }}"
-      hx-trigger="every 5s"
+      hx-trigger=""
       hx-swap="innerHTML"
       hx-target="#drawing-list"
     ></div>

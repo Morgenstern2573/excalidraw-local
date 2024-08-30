@@ -44,7 +44,7 @@ body {
     @apply hidden loading loading-spinner;
   }
 
-  .htmx-request .htmx-indicator {
+  .htmx-request > .htmx-indicator {
     @apply block;
   }
 
@@ -56,5 +56,9 @@ body {
 @layer utilities {
   .flex-center {
     @apply justify-center items-center;
+  }
+
+  .shadow-inset {
+    box-shadow: inset 0px 0px 3px #6b60a1;
   }
 }
