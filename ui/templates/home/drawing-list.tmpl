@@ -2,13 +2,13 @@
 
 {{ range .DrawingList }}
   <div
-    class="w-full grid grid-cols-[4fr_1fr] gap-small"
+    class="w-full grid grid-cols-[1fr_3rem] gap-small"
     id="drawing-list-{{ .ID }}"
   >
     <a
       hx-get="/app?drawing={{.ID}}"
       hx-target="body"
-      class="btn btn-sm flex justify-start no-animation relative"
+      class="btn btn-sm bg-white flex justify-start no-animation relative"
       hx-inidcator="closest span"
     >
       {{ if (index $.PresenceMap .ID) }}
@@ -27,7 +27,7 @@
      hx-delete="/app?drawing-ID={{ .ID }}"
      hx-target="#drawing-list-{{ .ID }}"
      hx-confirm="Are you sure you want to delete drawing {{ .Name }}"
-     class="btn btn-square no-animation"
+     class="btn btn-square bg-white no-animation"
     >
       <Svg name="trash" class="w-4 h-4 htmx-hide" />
 
