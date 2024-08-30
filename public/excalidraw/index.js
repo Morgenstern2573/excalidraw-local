@@ -118,6 +118,12 @@ function initExcalidraw() {
 
   const saveDrawingData = debounce(async function (api) {
     const elems = api.getSceneElements();
+
+    if (elems.length === 0) {
+      // TODO: FIX the scene-clearing nug. this is a hack.
+      return;
+    }
+
     const state = api.getAppState();
     let drawingData = ExcalidrawLib.serializeAsJSON(elems, state);
 
@@ -197,32 +203,32 @@ function initExcalidraw() {
           return;
         }
 
-        try {
-          fetch(`/app/get-users-at-drawing?drawingID=${DRAWING_ID}`)
-            .then((response) => response.json())
-            .then((resp) => {
-              let users = JSON.parse(resp);
+        // try {
+        //   fetch(`/app/get-users-at-drawing?drawingID=${DRAWING_ID}`)
+        //     .then((response) => response.json())
+        //     .then((resp) => {
+        //       let users = JSON.parse(resp);
 
-              const collaborators = new Map();
-              for (let user of users) {
-                collaborators.set(user.userID, {
-                  username: user.username,
-                  pointer: {
-                    x: parseFloat(user.xPos),
-                    y: parseFloat(user.yPos),
-                    tool: "pointer",
-                  },
-                });
-              }
+        //       const collaborators = new Map();
+        //       for (let user of users) {
+        //         collaborators.set(user.userID, {
+        //           username: user.username,
+        //           pointer: {
+        //             x: parseFloat(user.xPos),
+        //             y: parseFloat(user.yPos),
+        //             tool: "pointer",
+        //           },
+        //         });
+        //       }
 
-              excalidrawAPIRef.current.updateScene({
-                collaborators: collaborators,
-              });
-            });
-        } catch (err) {
-          console.log("error getting user positions");
-          console.error(err);
-        }
+        //       excalidrawAPIRef.current.updateScene({
+        //         collaborators: collaborators,
+        //       });
+        //     });
+        // } catch (err) {
+        //   console.log("error getting user positions");
+        //   console.error(err);
+        // }
       }, 1000);
 
       return cleanup;

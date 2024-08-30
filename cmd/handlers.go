@@ -89,7 +89,7 @@ func (a *Application) UpdateDrawingData(c echo.Context) error {
 		return err
 	}
 
-	return nil
+	return c.NoContent(http.StatusNoContent)
 }
 
 func (a *Application) CreateCollection(c echo.Context) error {
