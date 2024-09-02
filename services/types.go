@@ -58,7 +58,7 @@ type AppDrawingAccessLogs struct {
 }
 
 type AccessLog struct {
-	ID         string
+	ID         string `gorm:"primaryKey"`
 	UserID     string
 	DrawingID  string
 	AccessedAt time.Time
@@ -73,8 +73,8 @@ type User struct {
 }
 
 type Collection struct {
+	ID   string `gorm:"primaryKey"`
 	Name string
-	ID   string
 }
 
 type Drawing struct {
