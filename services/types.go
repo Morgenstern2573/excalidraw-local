@@ -7,10 +7,10 @@ import (
 )
 
 type AppServices struct {
-	Drawings          DrawingSvc
-	Collections       CollectionsSvc
-	Users             UserSvc
-	DrawingAccessLogs DrawingAccessLogSvc
+	Drawings    DrawingSvc
+	Collections CollectionsSvc
+	Users       UserSvc
+	// DrawingAccessLogs DrawingAccessLogSvc
 }
 
 type DrawingAccessLogSvc interface {
