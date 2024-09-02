@@ -77,9 +77,16 @@ func (a *AppDrawings) UpdateDrawingData(drawingID, data string) error {
 		return errors.New("no id passed")
 	}
 
-	if err := a.DB.Model(&Drawing{}).Where("id = ?", drawingID).Update("Data", data).Error; err != nil {
+	tx := a.DB.Model(&Drawing{}).Where("id = ?", drawingID).Update("Data", data)
+
+	if err := tx.Error; err != nil {
 		return err
 	}
+
+	if tx.RowsAffected == 0 {
+		return errors.New("id matches no records")
+	}
+
 	return nil
 }
 
