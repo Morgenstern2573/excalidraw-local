@@ -65,7 +65,7 @@ type AccessLog struct {
 }
 
 type User struct {
-	FirstName    string
+	FirstName    string `gorm:"primaryKey"`
 	LastName     string
 	ID           string
 	Email        string
