@@ -15,8 +15,8 @@
       class="px-6 lg:px-14 flex flex-col bg-white"
     >
       <header
-        class="bg-blue-500/50 lg:bg-transparent absolute h-56
-          lg:static lg:h-auto flex flex-col flex-center
+        class="bg-blue-500/50 md:bg-transparent absolute h-56
+          md:static md:h-auto flex flex-col flex-center
           rounded-b-[1.875rem] inset-x-0 top-0"
       >
         <h1 
@@ -31,9 +31,11 @@
         </h2>
       </header>
 
-      {{ block "content" . }}
-      
-      {{ end }}
+      <div class=" mt-60 md:mt-0">
+        {{ block "content" . }}
+        
+        {{ end }}
+      </div>
     </div>
 
     <div

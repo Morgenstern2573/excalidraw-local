@@ -1985,6 +1985,10 @@ input::placeholder {
   margin-top: calc(2 * var(--space-base));
 }
 
+.mt-60 {
+  margin-top: 15rem;
+}
+
 .block {
   display: block;
 }
@@ -2321,8 +2325,24 @@ body {
 }
 
 @media (min-width: 768px) {
+  .md\:static {
+    position: static;
+  }
+
+  .md\:mt-0 {
+    margin-top: 0px;
+  }
+
+  .md\:h-auto {
+    height: auto;
+  }
+
   .md\:grid-cols-\[1fr_4fr\] {
     grid-template-columns: 1fr 4fr;
+  }
+
+  .md\:bg-transparent {
+    background-color: transparent;
   }
 }
 
