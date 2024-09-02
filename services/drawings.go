@@ -19,7 +19,7 @@ func (a *AppDrawings) CreateDrawing(collectionID, name string) (Drawing, error) 
 
 	id := generateID()
 
-	drawing := Drawing{ID: id, Name: name, Collection: collectionID, Data: ""}
+	drawing := Drawing{ID: id, Name: name, CollectionID: collectionID, Data: ""}
 	a.DB.Create(&drawing)
 
 	if err = a.DB.Error; err != nil {
@@ -51,7 +51,7 @@ func (a *AppDrawings) GetDrawings(collectionID string) ([]Drawing, error) {
 	}
 
 	var drawings []Drawing
-	if err = a.DB.Where("collection = ?", collectionID).Find(&drawings).Error; err != nil {
+	if err = a.DB.Where("collectionID = ?", collectionID).Find(&drawings).Error; err != nil {
 		return nil, err
 	}
 	return drawings, nil
@@ -112,7 +112,7 @@ func (a *AppDrawings) GetParentCollectionID(drawingID string) (string, error) {
 		}
 		return "", err
 	}
-	return drawing.Collection, nil
+	return drawing.CollectionID, nil
 }
 
 func (a *AppDrawings) DeleteDrawing(drawingID string) error {

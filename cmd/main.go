@@ -11,6 +11,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"gorm.io/driver/sqlite" // Sqlite driver based on CGO
 	"gorm.io/gorm"
+	"gorm.io/gorm/schema"
 )
 
 type Application struct {
@@ -61,7 +62,11 @@ func main() {
 }
 
 func connectToDB() *gorm.DB {
-	db, err := gorm.Open(sqlite.Open("./data/xdraw-local.db"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("./data/xdraw-local.db"), &gorm.Config{
+		NamingStrategy: schema.NamingStrategy{
+			NoLowerCase: true,
+		},
+	})
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -34,7 +34,7 @@ func (a *Application) CreateDrawing(c echo.Context) error {
 		return err
 	}
 
-	updatedDrawingList, err := services.Drawings().GetDrawings(drawing.Collection)
+	updatedDrawingList, err := services.Drawings().GetDrawings(drawing.CollectionID)
 
 	if err != nil {
 		a.Server.Logger.Error(err)

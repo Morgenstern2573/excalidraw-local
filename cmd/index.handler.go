@@ -66,7 +66,7 @@ func (a *Application) Index(c echo.Context) error {
 			return err
 		}
 	} else if drawingID != "" {
-		activeCollection, err = services.Collections().GetCollection(activeDrawing.Collection)
+		activeCollection, err = services.Collections().GetCollection(activeDrawing.CollectionID)
 
 		if err != nil && err.Error() == "collection not found" {
 			return c.String(http.StatusNotFound, "Collection not found")

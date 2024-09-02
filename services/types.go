@@ -65,9 +65,9 @@ type AccessLog struct {
 }
 
 type User struct {
-	FirstName    string `gorm:"primaryKey"`
+	ID           string `gorm:"primaryKey"`
+	FirstName    string
 	LastName     string
-	ID           string
 	Email        string
 	PasswordHash string
 }
@@ -78,8 +78,8 @@ type Collection struct {
 }
 
 type Drawing struct {
-	ID         string `gorm:"primaryKey"`
-	Name       string
-	Collection string
-	Data       string
+	ID           string `gorm:"primaryKey"`
+	Name         string
+	CollectionID string
+	Data         string
 }
