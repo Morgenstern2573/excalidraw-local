@@ -1,8 +1,9 @@
 package services
 
 import (
-	"database/sql"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type AppServices struct {
@@ -41,19 +42,19 @@ type CollectionsSvc interface {
 }
 
 type AppDrawings struct {
-	DB *sql.DB
+	DB *gorm.DB
 }
 
 type AppCollections struct {
-	DB *sql.DB
+	DB *gorm.DB
 }
 
 type AppUsers struct {
-	DB *sql.DB
+	DB *gorm.DB
 }
 
 type AppDrawingAccessLogs struct {
-	DB *sql.DB
+	DB *gorm.DB
 }
 
 type AccessLog struct {
@@ -77,8 +78,8 @@ type Collection struct {
 }
 
 type Drawing struct {
+	ID         string `gorm:"primaryKey"`
 	Name       string
 	Collection string
-	ID         string
 	Data       string
 }

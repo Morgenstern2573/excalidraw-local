@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"log"
 	"time"
 
@@ -10,6 +9,8 @@ import (
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	_ "github.com/mattn/go-sqlite3"
+	"gorm.io/driver/sqlite" // Sqlite driver based on CGO
+	"gorm.io/gorm"
 )
 
 type Application struct {
@@ -21,7 +22,17 @@ type Application struct {
 func main() {
 
 	db := connectToDB()
-	defer db.Close()
+	defer func() {
+		sqlDB, err := db.DB()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		err = sqlDB.Close()
+		if err != nil {
+			log.Println("Failed to close database connection:", err)
+		}
+	}()
 
 	services.Init(db)
 
@@ -49,15 +60,15 @@ func main() {
 	app.Server.Logger.Fatal(app.Server.Start(":4000"))
 }
 
-func connectToDB() *sql.DB {
-	db, err := sql.Open("sqlite3", "./data/xdraw-local.db")
+func connectToDB() *gorm.DB {
+	db, err := gorm.Open(sqlite.Open("./data/xdraw-local.db"), &gorm.Config{})
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Enable foreign key checks
-	_, err = db.Exec("PRAGMA foreign_keys = ON;")
-	if err != nil {
+	tx := db.Exec("PRAGMA foreign_keys = ON;")
+	if err = tx.Error; err != nil {
 		log.Fatal(err)
 	}
 

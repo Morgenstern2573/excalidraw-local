@@ -1,14 +1,13 @@
 package services
 
 import (
-	"database/sql"
-
 	"github.com/rs/xid"
+	"gorm.io/gorm"
 )
 
 var serviceLayer AppServices
 
-func Init(db *sql.DB) {
+func Init(db *gorm.DB) {
 
 	serviceLayer = AppServices{
 		Users:             &AppUsers{DB: db},
