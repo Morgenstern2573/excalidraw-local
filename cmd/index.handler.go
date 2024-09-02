@@ -162,13 +162,6 @@ func (a *Application) Index(c echo.Context) error {
 		}
 	}
 
-	if drawingID != "" {
-		if err = services.AccessLogs().RecordAccess(userID, drawingID); err != nil {
-			a.Server.Logger.Error(err)
-			return err
-		}
-	}
-
 	if err = c.Render(http.StatusOK, "home", pageData); err != nil {
 		a.Server.Logger.Error(err)
 		return err
