@@ -113,7 +113,7 @@ func (a *AppDrawings) GetParentCollectionID(drawingID string) (string, error) {
 	}
 
 	var drawing Drawing
-	if err := a.DB.Select("Collection").First(&drawing, "id = ?", drawingID).Error; err != nil {
+	if err := a.DB.Select("CollectionID").First(&drawing, "id = ?", drawingID).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return "", errors.New("drawing not found")
 		}
