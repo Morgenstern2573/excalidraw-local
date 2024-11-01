@@ -1973,6 +1973,10 @@ input::placeholder {
   margin-top: 0.5rem;
 }
 
+.mt-60 {
+  margin-top: 15rem;
+}
+
 .mt-base {
   margin-top: var(--space-base);
 }
@@ -1985,8 +1989,8 @@ input::placeholder {
   margin-top: calc(2 * var(--space-base));
 }
 
-.mt-60 {
-  margin-top: 15rem;
+.mt-large {
+  margin-top: calc(1.5 * var(--space-base));
 }
 
 .block {
@@ -2087,10 +2091,6 @@ input::placeholder {
 
 .flex-col {
   flex-direction: column;
-}
-
-.flex-wrap {
-  flex-wrap: wrap;
 }
 
 .items-center {
@@ -2260,6 +2260,10 @@ input::placeholder {
   font-weight: 600;
 }
 
+.uppercase {
+  text-transform: uppercase;
+}
+
 .capitalize {
   text-transform: capitalize;
 }
@@ -2281,6 +2285,11 @@ input::placeholder {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.text-red-500 {
+  --tw-text-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-text-opacity));
 }
 
 .shadow {
@@ -2347,24 +2356,12 @@ body {
 }
 
 @media (min-width: 1024px) {
-  .lg\:static {
-    position: static;
-  }
-
   .lg\:flex {
     display: flex;
   }
 
-  .lg\:h-auto {
-    height: auto;
-  }
-
   .lg\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .lg\:bg-transparent {
-    background-color: transparent;
   }
 
   .lg\:px-14 {
